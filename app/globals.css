@@ -1,24 +1,99 @@
 :root {
-  --background: #07111f;
-  --background-deep: #040b14;
-  --surface: #0d1b2d;
-  --surface-strong: #12253b;
-  --surface-soft: #0a1727;
-  --text: #f4f8fc;
-  --muted: #aab8c8;
-  --muted-strong: #c8d3df;
-  --line: rgba(255, 255, 255, 0.12);
-  --line-strong: rgba(255, 255, 255, 0.2);
-  --accent: #55d6be;
-  --accent-strong: #20bda3;
+  /* Brand */
+  --color-brand-400: #6ee7d2;
+  --color-brand-500: #55d6be;
+  --color-brand-600: #20bda3;
+
+  /* Backgrounds */
+  --color-bg-deep: #030914;
+  --color-bg: #07111f;
+  --color-bg-elevated: #0a1727;
+
+  /* Surfaces */
+  --color-surface-1: #0d1b2d;
+  --color-surface-2: #12253b;
+  --color-surface-3: #172d46;
+
+  /* Typography */
+  --color-text-primary: #f4f8fc;
+  --color-text-secondary: #c8d3df;
+  --color-text-muted: #93a5b8;
+
+  /* Borders */
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-strong: rgba(255, 255, 255, 0.18);
+
+  /* Semantic */
+  --color-success: #55d6be;
+  --color-warning: #f5c76b;
+  --color-danger: #ff8d8d;
+  --color-info: #75bfff;
+
+  /* Compatibility aliases */
+  --background: var(--color-bg);
+  --background-deep: var(--color-bg-deep);
+  --surface: var(--color-surface-1);
+  --surface-strong: var(--color-surface-2);
+  --surface-soft: var(--color-bg-elevated);
+  --text: var(--color-text-primary);
+  --muted: var(--color-text-muted);
+  --muted-strong: var(--color-text-secondary);
+  --line: var(--color-border);
+  --line-strong: var(--color-border-strong);
+  --accent: var(--color-brand-500);
+  --accent-strong: var(--color-brand-600);
   --accent-soft: rgba(85, 214, 190, 0.12);
-  --danger: #ff8d8d;
+  --danger: var(--color-danger);
+
+  /* Typography */
+  --font-sans:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+
+  /* Layout */
   --max-width: 1180px;
   --header-height: 76px;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* Radius */
+  --radius-xs: 6px;
   --radius-sm: 10px;
   --radius-md: 18px;
   --radius-lg: 28px;
-  --shadow: 0 28px 80px rgba(0, 0, 0, 0.3);
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 18px 48px rgba(0, 0, 0, 0.24);
+  --shadow-lg: 0 28px 80px rgba(0, 0, 0, 0.3);
+  --shadow: var(--shadow-lg);
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-normal: 220ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 }
 
 * {
@@ -37,7 +112,7 @@ body {
   background:
     radial-gradient(circle at 80% 0%, rgba(85, 214, 190, 0.06), transparent 28rem),
     var(--background);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.65;
   text-rendering: optimizeLegibility;
@@ -318,7 +393,7 @@ p {
 .eyebrow {
   margin-bottom: 16px;
   color: var(--accent);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.14em;
@@ -369,7 +444,7 @@ p {
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid var(--line);
   border-radius: 999px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 0.76rem;
 }
 
@@ -415,7 +490,7 @@ p {
 .panel-kicker,
 .report-title-row span:first-child {
   color: var(--muted);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 0.72rem;
 }
 
@@ -428,7 +503,7 @@ p {
   background: var(--accent-soft);
   border: 1px solid rgba(85, 214, 190, 0.28);
   border-radius: 999px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 0.73rem;
   font-weight: 900;
 }
@@ -464,7 +539,7 @@ p {
   background: rgba(0, 0, 0, 0.28);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 11px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 0.78rem;
 }
 
@@ -535,7 +610,7 @@ p {
   display: inline-block;
   margin-bottom: 46px;
   color: var(--accent);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 0.76rem;
 }
 
@@ -570,7 +645,7 @@ p {
 
 .workflow-list span {
   color: var(--accent);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
 }
 
 .text-link {
@@ -809,7 +884,7 @@ p {
   background: rgba(0, 0, 0, 0.28);
   border: 1px solid var(--line);
   border-radius: 12px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
   line-height: 1.8;
 }
 
