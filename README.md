@@ -1,65 +1,80 @@
-# Project Atlas MVP
+# AI Test Lab Website
 
-This package adds the first Project Atlas dashboard to the `aitestlab-website`
-Next.js application.
+Production-oriented website foundation for `aitestlab.dev`.
 
-## Install
+## Foundation goals
 
-Copy these two files into the project root:
+- Explain the AI Test Lab value proposition clearly.
+- Preserve the product routes already established: Features, Atlas, Reports, Documentation, and Roadmap.
+- Keep the site lightweight and maintainable with Next.js App Router, TypeScript, and plain CSS.
+- Build in SEO, accessibility, security headers, responsive navigation, and automated quality checks from the start.
+- Remain ready for future Cloudflare Workers deployment and full-stack features.
 
-```text
-app/atlas/page.tsx
-data/atlas.ts
-```
+## Technology
 
-Then run:
+- Next.js 16 App Router
+- React 19
+- TypeScript strict mode
+- ESLint Core Web Vitals rules
+- Playwright desktop and mobile smoke tests
+- GitHub Actions quality pipeline
+- No third-party UI framework
+
+## Local development
+
+Use Node.js 24 LTS.
 
 ```powershell
+npm install
+# Commit the generated package-lock.json for reproducible CI builds.
 npm run dev
 ```
 
-Open:
+Open `http://localhost:3000`.
 
-```text
-http://localhost:3000/atlas
-```
-
-## Daily updates
-
-Edit `data/atlas.ts`.
-
-For each task, update:
-
-```ts
-actualHours: 3.5,
-status: "done",
-completedAt: "2026-08-03",
-notes: "Added dataset schema, validation, and unit tests.",
-```
-
-Valid statuses:
-
-```text
-not-started
-in-progress
-blocked
-done
-```
-
-## Recommended first validation
+## Validation
 
 ```powershell
 npm run lint
+npm run typecheck
 npm run build
+npm run test:e2e
 ```
 
-## Next release
+To install Playwright browsers the first time:
 
-The second version should add:
+```powershell
+npx playwright install chromium
+```
 
-1. Interactive checkbox and time-entry forms.
-2. Persistence using SQLite, PostgreSQL, or a hosted database.
-3. GitHub commit and release synchronization.
-4. Weekly hour charts.
-5. Sprint burndown charts.
-6. Public/private dashboard modes.
+## Environment
+
+Copy the example file when the canonical site URL differs from the default:
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+## Cloudflare Workers
+
+The current Cloudflare workflow can configure an existing Next.js project automatically. Review the proposed changes before deployment:
+
+```powershell
+npx wrangler setup --dry-run
+npx wrangler setup
+```
+
+Then use the generated preview and deploy scripts. Keep deployment configuration in version control after it has been reviewed against the active Cloudflare account.
+
+## Replacement procedure
+
+1. Commit the current website so it remains recoverable.
+2. Keep the existing `.git` directory.
+3. Replace the remaining project files with this foundation.
+4. Run `npm install`.
+5. Run the full validation sequence.
+6. Review the content and replace any illustrative report values with real project evidence before public launch.
+
+## Important content rule
+
+The Reports page explicitly labels its values as illustrative. Do not publish invented performance, customer, adoption, or quality claims as real evidence.

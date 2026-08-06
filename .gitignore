@@ -1,49 +1,38 @@
-# Dependencies
+# dependencies
 /node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
 
-# Next.js
+# next.js
 /.next/
 /out/
+
+# production
 /build
 
-# Coverage
+# testing
 /coverage
+/playwright-report/
+/test-results/
 
-# Environment
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# environment files
+.env*
 !.env.example
 
-# Vercel
-/.vercel
-
-# TypeScript
-*.tsbuildinfo
-next-env.d.ts
-
-# Logs
+# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+pnpm-debug.log*
 
-# IDE
-.vscode/
-.idea/
-
-# Operating System
+# local tooling
 .DS_Store
-Thumbs.db
-
-# Certificates
 *.pem
+.idea/
+.vscode/
+
+# cloudflare
+.wrangler/
+.dev.vars*
+!.dev.vars.example
+
+# typescript
+*.tsbuildinfo
