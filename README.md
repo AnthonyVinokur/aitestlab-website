@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Project Atlas MVP
 
-## Getting Started
+This package adds the first Project Atlas dashboard to the `aitestlab-website`
+Next.js application.
 
-First, run the development server:
+## Install
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Copy these two files into the project root:
+
+```text
+app/atlas/page.tsx
+data/atlas.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then run:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```powershell
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open:
 
-## Learn More
+```text
+http://localhost:3000/atlas
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Daily updates
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Edit `data/atlas.ts`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+For each task, update:
 
-## Deploy on Vercel
+```ts
+actualHours: 3.5,
+status: "done",
+completedAt: "2026-08-03",
+notes: "Added dataset schema, validation, and unit tests.",
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Valid statuses:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```text
+not-started
+in-progress
+blocked
+done
+```
+
+## Recommended first validation
+
+```powershell
+npm run lint
+npm run build
+```
+
+## Next release
+
+The second version should add:
+
+1. Interactive checkbox and time-entry forms.
+2. Persistence using SQLite, PostgreSQL, or a hosted database.
+3. GitHub commit and release synchronization.
+4. Weekly hour charts.
+5. Sprint burndown charts.
+6. Public/private dashboard modes.
