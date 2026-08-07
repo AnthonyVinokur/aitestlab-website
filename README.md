@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Test Lab Website
 
-## Getting Started
+Production-oriented website foundation for `aitestlab.dev`.
 
-First, run the development server:
+## Foundation goals
 
-```bash
+- Explain the AI Test Lab value proposition clearly.
+- Preserve the product routes already established: Features, Atlas, Reports, Documentation, and Roadmap.
+- Keep the site lightweight and maintainable with Next.js App Router, TypeScript, and plain CSS.
+- Build in SEO, accessibility, security headers, responsive navigation, and automated quality checks from the start.
+- Remain ready for future Cloudflare Workers deployment and full-stack features.
+
+## Technology
+
+- Next.js 16 App Router
+- React 19
+- TypeScript strict mode
+- ESLint Core Web Vitals rules
+- Playwright desktop and mobile smoke tests
+- GitHub Actions quality pipeline
+- No third-party UI framework
+
+## Local development
+
+Use Node.js 24 LTS.
+
+```powershell
+npm install
+# Commit the generated package-lock.json for reproducible CI builds.
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Validation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```powershell
+npm run lint
+npm run typecheck
+npm run build
+npm run test:e2e
+```
 
-## Learn More
+To install Playwright browsers the first time:
 
-To learn more about Next.js, take a look at the following resources:
+```powershell
+npx playwright install chromium
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Environment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Copy the example file when the canonical site URL differs from the default:
 
-## Deploy on Vercel
+```powershell
+Copy-Item .env.example .env.local
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Cloudflare Workers
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The current Cloudflare workflow can configure an existing Next.js project automatically. Review the proposed changes before deployment:
+
+```powershell
+npx wrangler setup --dry-run
+npx wrangler setup
+```
+
+Then use the generated preview and deploy scripts. Keep deployment configuration in version control after it has been reviewed against the active Cloudflare account.
+
+## Replacement procedure
+
+1. Commit the current website so it remains recoverable.
+2. Keep the existing `.git` directory.
+3. Replace the remaining project files with this foundation.
+4. Run `npm install`.
+5. Run the full validation sequence.
+6. Review the content and replace any illustrative report values with real project evidence before public launch.
+
+## Important content rule
+
+The Reports page explicitly labels its values as illustrative. Do not publish invented performance, customer, adoption, or quality claims as real evidence.
