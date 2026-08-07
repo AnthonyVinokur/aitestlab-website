@@ -1736,3 +1736,436 @@ p {
   display: grid;
   align-items: center;
 }
+/* ==========================================================================
+   W2.1 — Homepage composition
+   Uses W1 design tokens and shared primitives. Homepage-only selectors use
+   the home-* prefix to avoid coupling this composition to other routes.
+   ========================================================================== */
+
+.home-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-10);
+}
+
+.home-console {
+  overflow: hidden;
+}
+
+.home-console-header,
+.home-console-results > div,
+.home-console-summary,
+.home-code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.home-console-header {
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--line);
+}
+
+.home-console-header > div {
+  display: grid;
+  gap: 3px;
+}
+
+.home-console-kicker,
+.home-console-header small,
+.home-console-summary small,
+.home-architecture small,
+.home-engine-grid small,
+.home-architecture-output small,
+.home-code-header > span {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-console-results {
+  display: grid;
+  gap: 0;
+  padding-block: var(--space-4);
+}
+
+.home-console-results > div {
+  min-height: 44px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.home-console-results > div:last-child {
+  border-bottom: 0;
+}
+
+.home-console-results code {
+  color: var(--muted-strong);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.home-console-summary {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+.home-console-summary > span {
+  display: grid;
+  gap: 2px;
+}
+
+.home-console-summary strong {
+  font-size: var(--text-xl);
+}
+
+.home-pipeline {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+}
+
+.home-pipeline-step {
+  position: relative;
+  min-height: 72px;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  border-right: 1px solid var(--line);
+  color: var(--muted-strong);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.home-pipeline-step:last-child {
+  border-right: 0;
+  color: var(--accent);
+}
+
+.home-pipeline-arrow {
+  position: absolute;
+  right: -9px;
+  z-index: 2;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  background: var(--background);
+  font-family: var(--font-sans);
+}
+
+.home-capability-grid,
+.home-principles-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-5);
+  margin-top: var(--space-10);
+}
+
+.home-capability-card,
+.home-principle-card {
+  min-height: 250px;
+}
+
+.home-capability-card h3,
+.home-principle-card h3 {
+  margin-top: var(--space-8);
+}
+
+.home-capability-card p,
+.home-principle-card p,
+.home-final-cta p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.home-architecture-layout,
+.home-evidence-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(520px, 1.15fr);
+  gap: clamp(40px, 7vw, 96px);
+  align-items: center;
+}
+
+.home-architecture {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.home-architecture-node {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "index title"
+    "index meta";
+  column-gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.home-architecture-node > span {
+  grid-area: index;
+  align-self: center;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.home-architecture-node strong {
+  grid-area: title;
+}
+
+.home-architecture-node small {
+  grid-area: meta;
+}
+
+.home-architecture-connector {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  text-align: center;
+}
+
+.home-engine-grid,
+.home-architecture-output {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+.home-engine-grid > div,
+.home-architecture-output > div {
+  min-height: 86px;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  padding: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xs);
+  background: var(--surface-soft);
+}
+
+.home-engine-grid strong,
+.home-architecture-output strong {
+  font-size: var(--text-sm);
+}
+
+.home-architecture-output {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.home-principle-number {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.home-code-card {
+  overflow: hidden;
+}
+
+.home-code-header {
+  margin: calc(var(--space-6) * -1) calc(var(--space-6) * -1) 0;
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.home-code-card pre {
+  margin: 0;
+  padding-top: var(--space-6);
+  overflow-x: auto;
+  color: var(--muted-strong);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+
+.home-code-card code {
+  font-family: inherit;
+}
+
+.home-evidence-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.home-direction {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  margin-top: var(--space-10);
+}
+
+.home-direction-item {
+  position: relative;
+  min-height: 140px;
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  padding-right: var(--space-6);
+}
+
+.home-direction-item > span:first-child {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.home-direction-item strong {
+  max-width: 170px;
+}
+
+.home-direction-line {
+  position: absolute;
+  top: 8px;
+  left: 38px;
+  right: 0;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.home-roadmap-action {
+  margin-top: var(--space-6);
+}
+
+.home-final-section {
+  padding-bottom: var(--space-24);
+}
+
+.home-final-cta {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-10);
+  padding: clamp(32px, 5vw, 64px);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(85, 214, 190, 0.1), transparent 32rem),
+    var(--surface);
+}
+
+.home-final-cta h2 {
+  max-width: 760px;
+  margin-bottom: var(--space-4);
+}
+
+.home-final-cta > div:first-child {
+  max-width: 760px;
+}
+
+.home-final-actions {
+  min-width: max-content;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+@media (max-width: 980px) {
+  .home-capability-grid,
+  .home-principles-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-architecture-layout,
+  .home-evidence-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .home-direction {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: var(--space-8);
+  }
+
+  .home-direction-item:nth-child(3) .home-direction-line,
+  .home-direction-item:last-child .home-direction-line {
+    display: none;
+  }
+
+  .home-final-cta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .home-final-actions {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .home-pipeline {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .home-pipeline-step {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .home-pipeline-step:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .home-pipeline-step:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  .home-pipeline-arrow {
+    display: none;
+  }
+
+  .home-capability-grid,
+  .home-principles-grid,
+  .home-engine-grid,
+  .home-architecture-output,
+  .home-direction {
+    grid-template-columns: 1fr;
+  }
+
+  .home-capability-card,
+  .home-principle-card {
+    min-height: auto;
+  }
+
+  .home-direction-item {
+    min-height: auto;
+    grid-template-columns: 32px 1fr;
+    align-items: start;
+    padding: 0 0 var(--space-6);
+  }
+
+  .home-direction-item strong {
+    max-width: none;
+  }
+
+  .home-direction-line {
+    top: 28px;
+    bottom: 0;
+    left: 7px;
+    right: auto;
+    width: 1px;
+    height: auto;
+  }
+
+  .home-direction-item:nth-child(3) .home-direction-line {
+    display: block;
+  }
+
+  .home-final-actions,
+  .home-hero-actions,
+  .home-evidence-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+

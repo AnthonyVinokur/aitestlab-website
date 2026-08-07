@@ -4,141 +4,368 @@ import { PageHero } from "@/components/page-hero";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { StatusIndicator } from "@/components/ui/status-indicator";
 
 export const metadata: Metadata = {
-  title: "Roadmap",
-  description: "Review the strategic development direction for AI Test Lab.",
-  alternates: { canonical: "/roadmap" },
+  title: "AI Test Lab | Automated LLM Evaluation & AI Quality Engineering",
+  description:
+    "AI Test Lab is an engineering framework for repeatable LLM evaluation, prompt regression, model comparison, normalized evidence, and CI/CD quality gates.",
+  alternates: { canonical: "/" },
 };
 
-const phases = [
+const capabilities = [
   {
     number: "01",
-    label: "Foundation",
-    title: "Repeatable core evaluation",
-    text: "Deterministic assertions, datasets, model execution, normalized results, reports, and CLI workflows.",
-    status: "Established",
-    statusType: "pass" as const,
+    title: "Prompt regression",
+    text: "Turn expected AI behavior into repeatable tests and detect regressions before they reach production.",
   },
   {
     number: "02",
-    label: "Extensibility",
-    title: "Profiles and evaluation engines",
-    text: "Reusable evaluation profiles and plugin boundaries for specialized RAG, quality, and model-judge evaluators.",
-    status: "Active direction",
-    statusType: "warning" as const,
+    title: "Model evaluation",
+    text: "Run the same datasets and evaluation criteria across models to compare behavior with consistent evidence.",
   },
   {
     number: "03",
-    label: "Operations",
-    title: "CI quality gates and trend evidence",
-    text: "Release policies, baseline comparison, historical regression evidence, and engineering workflow integrations.",
-    status: "Planned",
-    statusType: "neutral" as const,
+    title: "Evaluation engines",
+    text: "Keep the core lightweight while enabling specialized evaluators through clear plugin boundaries.",
   },
   {
     number: "04",
-    label: "Governance",
-    title: "Enterprise evidence and controls",
-    text: "Audit-oriented reporting, policy packs, drift evidence, access controls, and governance integrations.",
-    status: "Long-term",
-    statusType: "neutral" as const,
+    title: "CI/CD quality gates",
+    text: "Convert evaluation outcomes into deployment evidence that engineering teams can enforce in delivery pipelines.",
   },
 ];
 
-export default function RoadmapPage() {
+const principles = [
+  {
+    title: "Repeatable",
+    text: "AI quality decisions should be based on reproducible evaluation evidence, not one-off prompt experiments.",
+  },
+  {
+    title: "Engine-agnostic",
+    text: "Specialized evaluation engines remain optional. The framework normalizes their output without coupling the core to one vendor.",
+  },
+  {
+    title: "CI-native",
+    text: "Evaluation belongs inside the software delivery lifecycle, where regressions can block releases before customers see them.",
+  },
+];
+
+const direction = [
+  "Prompt testing",
+  "Multi-model evaluation",
+  "External evaluation engines",
+  "LLM-as-a-Judge",
+  "Enterprise governance",
+];
+
+export default function HomePage() {
   return (
     <>
       <PageHero
-        eyebrow="Product roadmap"
-        title="Build the evidence layer first."
-        description="AI Test Lab prioritizes a dependable evaluation core before expanding into enterprise integrations, governance controls, and broader platform capabilities."
+        eyebrow="AI QUALITY ENGINEERING"
+        title="Test AI systems with evidence, not intuition."
+        description="AI Test Lab brings repeatable LLM evaluation, prompt regression, model comparison, normalized results, and CI/CD quality gates into one engineering workflow."
       >
-        <Card className="roadmap-overview-card" elevated>
-          <div className="roadmap-overview-header">
+        <Card elevated className="home-console">
+          <div className="home-console-header">
             <div>
-              <span className="panel-kicker">current development focus</span>
-              <strong>Evaluation profiles</strong>
+              <span className="home-console-kicker">evaluation run</span>
+              <strong>release-candidate / llama3.1</strong>
             </div>
-
-            <StatusIndicator
-              status="warning"
-              label="IN PROGRESS"
-            />
+            <StatusIndicator status="fail" label="GATE FAILED" />
           </div>
 
-          <div className="roadmap-overview-metrics">
+          <div className="home-console-results" aria-label="Evaluation results">
             <div>
-              <span>Current phase</span>
-              <strong>Extensibility</strong>
+              <code>greeting-001</code>
+              <StatusIndicator status="pass" />
             </div>
-
             <div>
-              <span>Core direction</span>
-              <strong>Lightweight</strong>
+              <code>python-001</code>
+              <StatusIndicator status="pass" />
             </div>
-
             <div>
-              <span>Architecture</span>
-              <strong>Plugin-based</strong>
+              <code>safety-003</code>
+              <StatusIndicator status="fail" />
+            </div>
+            <div>
+              <code>regression-012</code>
+              <StatusIndicator status="pass" />
             </div>
           </div>
 
-          <div className="roadmap-overview-actions">
-            <Button href="/documentation" size="small">
-              View architecture
-            </Button>
-
-            <Button
-              href="/features"
-              variant="secondary"
-              size="small"
-            >
-              Explore features
-            </Button>
+          <div className="home-console-summary">
+            <span>
+              <small>Passed</small>
+              <strong>11</strong>
+            </span>
+            <span>
+              <small>Failed</small>
+              <strong>1</strong>
+            </span>
+            <span>
+              <small>Errors</small>
+              <strong>0</strong>
+            </span>
           </div>
         </Card>
       </PageHero>
 
       <section className="section section-tight">
         <Container>
-          <div className="roadmap-intro">
-            <div>
-              <p className="eyebrow">Development sequence</p>
-              <h2>Expand capability without weakening the core.</h2>
-            </div>
-
-            <p>
-              Each phase builds on normalized evaluation evidence. New engines,
-              workflows, and governance controls remain optional rather than
-              becoming mandatory dependencies.
-            </p>
+          <div className="home-hero-actions">
+            <Button href="/features">Explore AI Test Lab</Button>
+            <Button
+              href="https://github.com/AnthonyVinokur/AI-Test-Lab"
+              variant="secondary"
+              external
+            >
+              View on GitHub
+            </Button>
           </div>
 
-          <div className="roadmap-grid">
-            {phases.map((phase) => (
-              <Card className="roadmap-phase-card" key={phase.number}>
-                <div className="roadmap-phase-top">
-                  <Badge>{phase.number}</Badge>
-
-                  <StatusIndicator
-                    status={phase.statusType}
-                    label={phase.status}
-                  />
+          <div className="home-pipeline" aria-label="AI Test Lab evaluation pipeline">
+            {["Dataset", "Model", "Evaluation", "Metrics", "Report", "Quality Gate"].map(
+              (step, index, items) => (
+                <div className="home-pipeline-step" key={step}>
+                  <span>{step}</span>
+                  {index < items.length - 1 ? (
+                    <span className="home-pipeline-arrow" aria-hidden="true">
+                      →
+                    </span>
+                  ) : null}
                 </div>
+              ),
+            )}
+          </div>
+        </Container>
+      </section>
 
-                <div className="roadmap-phase-content">
-                  <p className="roadmap-phase-label">
-                    {phase.label}
-                  </p>
+      <section className="section">
+        <Container>
+          <SectionHeading
+            eyebrow="Core capabilities"
+            title="Evaluation infrastructure for engineering teams."
+          >
+            <p>
+              AI Test Lab focuses on the evidence layer between model behavior and
+              release decisions.
+            </p>
+          </SectionHeading>
 
-                  <h2>{phase.title}</h2>
-                  <p>{phase.text}</p>
-                </div>
+          <div className="home-capability-grid">
+            {capabilities.map((capability) => (
+              <Card className="home-capability-card" key={capability.number}>
+                <Badge>{capability.number}</Badge>
+                <h3>{capability.title}</h3>
+                <p>{capability.text}</p>
               </Card>
             ))}
           </div>
+        </Container>
+      </section>
+
+      <section className="section">
+        <Container>
+          <div className="home-architecture-layout">
+            <SectionHeading
+              eyebrow="Architecture"
+              title="A lightweight core with pluggable evaluation depth."
+            >
+              <p>
+                Test definitions enter one evaluation pipeline. Native and external
+                evaluators produce normalized evidence that reports and quality gates
+                can consume consistently.
+              </p>
+            </SectionHeading>
+
+            <Card elevated className="home-architecture">
+              <div className="home-architecture-node home-architecture-source">
+                <span>01</span>
+                <strong>Test definitions</strong>
+                <small>YAML / JSON / datasets</small>
+              </div>
+
+              <div className="home-architecture-connector" aria-hidden="true">
+                ↓
+              </div>
+
+              <div className="home-architecture-node">
+                <span>02</span>
+                <strong>Evaluation pipeline</strong>
+                <small>Execution + orchestration</small>
+              </div>
+
+              <div className="home-architecture-connector" aria-hidden="true">
+                ↓
+              </div>
+
+              <div className="home-engine-grid">
+                <div>
+                  <small>Native</small>
+                  <strong>Assertions</strong>
+                </div>
+                <div>
+                  <small>Plugin</small>
+                  <strong>Ragas</strong>
+                </div>
+                <div>
+                  <small>Plugin</small>
+                  <strong>DeepEval</strong>
+                </div>
+                <div>
+                  <small>Plugin</small>
+                  <strong>Judge / custom</strong>
+                </div>
+              </div>
+
+              <div className="home-architecture-connector" aria-hidden="true">
+                ↓
+              </div>
+
+              <div className="home-architecture-node">
+                <span>03</span>
+                <strong>Normalized results</strong>
+                <small>Scores + evidence + status</small>
+              </div>
+
+              <div className="home-architecture-output">
+                <div>
+                  <small>Output</small>
+                  <strong>Reports</strong>
+                </div>
+                <div>
+                  <small>Decision</small>
+                  <strong>Quality gate</strong>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </Container>
+      </section>
+
+      <section className="section">
+        <Container>
+          <SectionHeading
+            eyebrow="Engineering principles"
+            title="Built around how software teams already work."
+          />
+
+          <div className="home-principles-grid">
+            {principles.map((principle, index) => (
+              <Card className="home-principle-card" key={principle.title}>
+                <span className="home-principle-number">0{index + 1}</span>
+                <h3>{principle.title}</h3>
+                <p>{principle.text}</p>
+              </Card>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="section">
+        <Container>
+          <div className="home-evidence-layout">
+            <SectionHeading
+              eyebrow="Evaluation as code"
+              title="Define behavior once. Evaluate it repeatedly."
+            >
+              <p>
+                Evaluation definitions belong beside application code so teams can
+                version, review, reproduce, and automate AI quality expectations.
+              </p>
+              <div className="home-evidence-actions">
+                <Button href="/documentation" size="small">
+                  Read documentation
+                </Button>
+                <Button href="/reports" variant="secondary" size="small">
+                  Explore reports
+                </Button>
+              </div>
+            </SectionHeading>
+
+            <Card elevated className="home-code-card">
+              <div className="home-code-header">
+                <span>evaluation.yaml</span>
+                <Badge variant="success">versioned</Badge>
+              </div>
+              <pre>
+                <code>{`id: support-answer-001
+prompt: "How do I reset my password?"
+
+assertions:
+  - type: contains
+    value: "reset"
+
+evaluators:
+  - correctness
+  - relevance
+
+quality_gate:
+  min_score: 0.85`}</code>
+              </pre>
+            </Card>
+          </div>
+        </Container>
+      </section>
+
+      <section className="section">
+        <Container>
+          <SectionHeading
+            eyebrow="Project direction"
+            title="From deterministic prompt tests to enterprise evidence."
+          >
+            <p>
+              The roadmap expands evaluation depth without abandoning the same
+              normalized evidence model.
+            </p>
+          </SectionHeading>
+
+          <div className="home-direction">
+            {direction.map((item, index) => (
+              <div className="home-direction-item" key={item}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <strong>{item}</strong>
+                {index < direction.length - 1 ? (
+                  <span className="home-direction-line" aria-hidden="true" />
+                ) : null}
+              </div>
+            ))}
+          </div>
+
+          <div className="home-roadmap-action">
+            <Button href="/roadmap" variant="secondary" size="small">
+              View full roadmap
+            </Button>
+          </div>
+        </Container>
+      </section>
+
+      <section className="section home-final-section">
+        <Container>
+          <Card elevated className="home-final-cta">
+            <div>
+              <p className="eyebrow">AI Test Lab</p>
+              <h2>Build measurable confidence into AI releases.</h2>
+              <p>
+                Move AI quality from subjective review to repeatable engineering
+                evidence.
+              </p>
+            </div>
+
+            <div className="home-final-actions">
+              <Button href="/documentation">Explore the architecture</Button>
+              <Button
+                href="https://github.com/AnthonyVinokur/AI-Test-Lab"
+                variant="secondary"
+                external
+              >
+                View repository
+              </Button>
+            </div>
+          </Card>
         </Container>
       </section>
     </>
