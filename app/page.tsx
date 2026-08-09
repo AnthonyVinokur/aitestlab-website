@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
+import { LatestEvaluationPreview } from "@/components/evaluation/latest-evaluation-preview";
 import { PageHero } from "@/components/page-hero";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { StatusIndicator } from "@/components/ui/status-indicator";
 
 export const metadata: Metadata = {
   title: "AI Test Lab | Automated LLM Evaluation & AI Quality Engineering",
@@ -13,6 +12,24 @@ export const metadata: Metadata = {
     "AI Test Lab is an engineering framework for repeatable LLM evaluation, prompt regression, model comparison, normalized evidence, and CI/CD quality gates.",
   alternates: { canonical: "/" },
 };
+
+const proofPoints = [
+  {
+    number: "01",
+    title: "Repeatable",
+    text: "Run version-controlled evaluation definitions repeatedly as prompts, models, and application behavior change.",
+  },
+  {
+    number: "02",
+    title: "Engine-agnostic",
+    text: "Combine native assertions with specialized evaluation engines while keeping their results behind one normalized evidence model.",
+  },
+  {
+    number: "03",
+    title: "Release-ready",
+    text: "Convert evaluation outcomes into structured evidence that reporting and CI/CD quality gates can consume.",
+  },
+];
 
 const capabilities = [
   {
@@ -64,203 +81,84 @@ export default function HomePage() {
   return (
     <>
       <PageHero
-  eyebrow="AI QUALITY ENGINEERING"
-  title="Test AI systems with evidence, not intuition."
-  description="AI Test Lab turns prompts, models, evaluators, and quality thresholds into repeatable engineering tests that can run before every release."
->
-  <div className="home-hero-product">
-    <Card elevated className="home-console">
-      <div className="home-console-toolbar">
-        <div className="home-console-toolbar-left">
-          <span className="home-console-dot" />
-          <span className="home-console-dot" />
-          <span className="home-console-dot" />
+        eyebrow="AI QUALITY ENGINEERING"
+        title="Test AI systems with evidence, not intuition."
+        description="AI Test Lab turns prompts, models, evaluators, and quality thresholds into repeatable engineering tests that can run before every release."
+      >
+        <div className="home-hero-product">
+          <LatestEvaluationPreview />
         </div>
 
-        <span className="home-console-product-name">AI TEST LAB</span>
+        <div className="home-hero-actions">
+          <Button href="/features">Explore AI Test Lab</Button>
 
-        <Badge>RUN #184</Badge>
-      </div>
-
-      <div className="home-console-header">
-        <div>
-          <span className="home-console-kicker">evaluation run</span>
-          <strong>release-candidate / llama3.1</strong>
+          <Button
+            href="https://github.com/AnthonyVinokur/AI-Test-Lab"
+            variant="secondary"
+            external
+          >
+            View on GitHub
+          </Button>
         </div>
 
-        <StatusIndicator status="fail" label="GATE FAILED" />
-      </div>
-
-      <div className="home-console-meta">
-        <div>
-          <small>Dataset</small>
-          <strong>release-regression</strong>
+        <div className="home-hero-stack" aria-label="AI Test Lab technology">
+          <span>Python</span>
+          <span>Pytest</span>
+          <span>Ollama</span>
+          <span>Ragas</span>
+          <span>DeepEval</span>
+          <span>CI/CD</span>
         </div>
+      </PageHero>
 
-        <div>
-          <small>Evaluator</small>
-          <strong>native + judge</strong>
-        </div>
+      <section className="section section-tight home-proof-section">
+        <Container>
+          <SectionHeading
+            eyebrow="How AI Test Lab works"
+            title="From AI output to engineering evidence."
+          >
+            <p>
+              AI Test Lab turns test definitions, model responses, and evaluator
+              results into normalized evidence that engineering teams can use
+              for repeatable release decisions.
+            </p>
+          </SectionHeading>
 
-        <div>
-          <small>Threshold</small>
-          <strong>95%</strong>
-        </div>
-      </div>
+          <div
+            className="home-pipeline"
+            aria-label="AI Test Lab evaluation pipeline"
+          >
+            {[
+              "Test Cases",
+              "Models",
+              "Evaluators",
+              "Normalized Results",
+              "Quality Gate",
+            ].map((step, index, items) => (
+              <div className="home-pipeline-step" key={step}>
+                <span>{step}</span>
 
-      <div className="home-console-results" aria-label="Evaluation results">
-        <div>
-          <span>
-            <code>greeting-001</code>
-            <small>contains assertion</small>
-          </span>
-          <StatusIndicator status="pass" />
-        </div>
+                {index < items.length - 1 ? (
+                  <span className="home-pipeline-arrow" aria-hidden="true">
+                    →
+                  </span>
+                ) : null}
+              </div>
+            ))}
+          </div>
 
-        <div>
-          <span>
-            <code>python-001</code>
-            <small>correctness</small>
-          </span>
-          <StatusIndicator status="pass" />
-        </div>
+          <div className="home-proof-grid">
+            {proofPoints.map((item) => (
+              <article className="home-proof-item" key={item.number}>
+                <span className="home-section-index">{item.number}</span>
 
-        <div className="home-console-result-failed">
-          <span>
-            <code>safety-003</code>
-            <small>policy regression detected</small>
-          </span>
-          <StatusIndicator status="fail" />
-        </div>
-
-        <div>
-          <span>
-            <code>regression-012</code>
-            <small>semantic similarity</small>
-          </span>
-          <StatusIndicator status="pass" />
-        </div>
-      </div>
-
-      <div className="home-console-footer">
-        <div className="home-console-summary">
-          <span>
-            <small>Passed</small>
-            <strong>11</strong>
-          </span>
-          <span>
-            <small>Failed</small>
-            <strong>1</strong>
-          </span>
-          <span>
-            <small>Errors</small>
-            <strong>0</strong>
-          </span>
-        </div>
-
-        <div className="home-console-score">
-          <small>QUALITY SCORE</small>
-          <strong>91.7%</strong>
-          <span>required 95%</span>
-        </div>
-      </div>
-    </Card>
-
-    <div className="home-hero-signal">
-      <span className="home-hero-signal-dot" />
-      <span>Evaluation complete</span>
-      <strong>Release blocked</strong>
-    </div>
-  </div>
-
-  <div className="home-hero-actions">
-    <Button href="/features">Explore AI Test Lab</Button>
-
-    <Button
-      href="https://github.com/AnthonyVinokur/AI-Test-Lab"
-      variant="secondary"
-      external
-    >
-      View on GitHub
-    </Button>
-  </div>
-
-  <div className="home-hero-stack" aria-label="AI Test Lab technology">
-    <span>Python</span>
-    <span>Pytest</span>
-    <span>Ollama</span>
-    <span>Ragas</span>
-    <span>DeepEval</span>
-    <span>CI/CD</span>
-  </div>
-</PageHero>
-
-<section className="section section-tight home-proof-section">
-  <Container>
-    <SectionHeading
-      eyebrow="How AI Test Lab works"
-      title="From AI output to engineering evidence."
-    >
-      <p>
-        AI Test Lab turns test definitions, model responses, and evaluator
-        results into normalized evidence that engineering teams can use for
-        repeatable release decisions.
-      </p>
-    </SectionHeading>
-
-    <div
-      className="home-pipeline"
-      aria-label="AI Test Lab evaluation pipeline"
-    >
-      {[
-        "Test Cases",
-        "Models",
-        "Evaluators",
-        "Normalized Results",
-        "Quality Gate",
-      ].map((step, index, items) => (
-        <div className="home-pipeline-step" key={step}>
-          <span>{step}</span>
-
-          {index < items.length - 1 ? (
-            <span className="home-pipeline-arrow" aria-hidden="true">
-              →
-            </span>
-          ) : null}
-        </div>
-      ))}
-    </div>
-
-    <div className="home-proof-grid">
-      <Card className="home-proof-card">
-        <Badge>01</Badge>
-        <h3>Repeatable</h3>
-        <p>
-          Run version-controlled evaluation definitions repeatedly as prompts,
-          models, and application behavior change.
-        </p>
-      </Card>
-
-      <Card className="home-proof-card">
-        <Badge>02</Badge>
-        <h3>Engine-agnostic</h3>
-        <p>
-          Combine native assertions with specialized evaluation engines while
-          keeping their results behind one normalized evidence model.
-        </p>
-      </Card>
-
-      <Card className="home-proof-card">
-        <Badge>03</Badge>
-        <h3>Release-ready</h3>
-        <p>
-          Convert evaluation outcomes into structured evidence that reporting
-          and CI/CD quality gates can consume.
-        </p>
-      </Card>
-    </div>
-  </Container>
-</section>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))}
+          </div>
+        </Container>
+      </section>
 
       <section className="section">
         <Container>
@@ -269,18 +167,21 @@ export default function HomePage() {
             title="Evaluation infrastructure for engineering teams."
           >
             <p>
-              AI Test Lab focuses on the evidence layer between model behavior and
-              release decisions.
+              AI Test Lab focuses on the evidence layer between model behavior
+              and release decisions.
             </p>
           </SectionHeading>
 
           <div className="home-capability-grid">
             {capabilities.map((capability) => (
-              <Card className="home-capability-card" key={capability.number}>
-                <Badge>{capability.number}</Badge>
-                <h3>{capability.title}</h3>
-                <p>{capability.text}</p>
-              </Card>
+              <article className="home-capability-item" key={capability.number}>
+                <span className="home-section-index">{capability.number}</span>
+
+                <div>
+                  <h3>{capability.title}</h3>
+                  <p>{capability.text}</p>
+                </div>
+              </article>
             ))}
           </div>
         </Container>
@@ -294,13 +195,13 @@ export default function HomePage() {
               title="A lightweight core with pluggable evaluation depth."
             >
               <p>
-                Test definitions enter one evaluation pipeline. Native and external
-                evaluators produce normalized evidence that reports and quality gates
-                can consume consistently.
+                Test definitions enter one evaluation pipeline. Native and
+                external evaluators produce normalized evidence that reports and
+                quality gates can consume consistently.
               </p>
             </SectionHeading>
 
-            <Card elevated className="home-architecture">
+            <div className="home-architecture">
               <div className="home-architecture-node home-architecture-source">
                 <span>01</span>
                 <strong>Test definitions</strong>
@@ -326,14 +227,17 @@ export default function HomePage() {
                   <small>Native</small>
                   <strong>Assertions</strong>
                 </div>
+
                 <div>
                   <small>Plugin</small>
                   <strong>Ragas</strong>
                 </div>
+
                 <div>
                   <small>Plugin</small>
                   <strong>DeepEval</strong>
                 </div>
+
                 <div>
                   <small>Plugin</small>
                   <strong>Judge / custom</strong>
@@ -355,12 +259,13 @@ export default function HomePage() {
                   <small>Output</small>
                   <strong>Reports</strong>
                 </div>
+
                 <div>
                   <small>Decision</small>
                   <strong>Quality gate</strong>
                 </div>
               </div>
-            </Card>
+            </div>
           </div>
         </Container>
       </section>
@@ -374,11 +279,14 @@ export default function HomePage() {
 
           <div className="home-principles-grid">
             {principles.map((principle, index) => (
-              <Card className="home-principle-card" key={principle.title}>
+              <article className="home-principle-item" key={principle.title}>
                 <span className="home-principle-number">0{index + 1}</span>
-                <h3>{principle.title}</h3>
-                <p>{principle.text}</p>
-              </Card>
+
+                <div>
+                  <h3>{principle.title}</h3>
+                  <p>{principle.text}</p>
+                </div>
+              </article>
             ))}
           </div>
         </Container>
@@ -392,24 +300,28 @@ export default function HomePage() {
               title="Define behavior once. Evaluate it repeatedly."
             >
               <p>
-                Evaluation definitions belong beside application code so teams can
-                version, review, reproduce, and automate AI quality expectations.
+                Evaluation definitions belong beside application code so teams
+                can version, review, reproduce, and automate AI quality
+                expectations.
               </p>
+
               <div className="home-evidence-actions">
                 <Button href="/documentation" size="small">
                   Read documentation
                 </Button>
+
                 <Button href="/reports" variant="secondary" size="small">
                   Explore reports
                 </Button>
               </div>
             </SectionHeading>
 
-            <Card elevated className="home-code-card">
+            <div className="home-code-card">
               <div className="home-code-header">
                 <span>evaluation.yaml</span>
                 <Badge variant="success">versioned</Badge>
               </div>
+
               <pre>
                 <code>{`id: support-answer-001
 prompt: "How do I reset my password?"
@@ -425,7 +337,7 @@ evaluators:
 quality_gate:
   min_score: 0.85`}</code>
               </pre>
-            </Card>
+            </div>
           </div>
         </Container>
       </section>
@@ -446,7 +358,9 @@ quality_gate:
             {direction.map((item, index) => (
               <div className="home-direction-item" key={item}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
+
                 <strong>{item}</strong>
+
                 {index < direction.length - 1 ? (
                   <span className="home-direction-line" aria-hidden="true" />
                 ) : null}
@@ -464,10 +378,12 @@ quality_gate:
 
       <section className="section home-final-section">
         <Container>
-          <Card elevated className="home-final-cta">
+          <div className="home-final-cta">
             <div>
               <p className="eyebrow">AI Test Lab</p>
+
               <h2>Build measurable confidence into AI releases.</h2>
+
               <p>
                 Move AI quality from subjective review to repeatable engineering
                 evidence.
@@ -476,6 +392,7 @@ quality_gate:
 
             <div className="home-final-actions">
               <Button href="/documentation">Explore the architecture</Button>
+
               <Button
                 href="https://github.com/AnthonyVinokur/AI-Test-Lab"
                 variant="secondary"
@@ -484,7 +401,7 @@ quality_gate:
                 View repository
               </Button>
             </div>
-          </Card>
+          </div>
         </Container>
       </section>
     </>

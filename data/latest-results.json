@@ -1,0 +1,280 @@
+{
+  "generated_at": "2026-08-08T12:29:18-04:00",
+  "models": [
+    "llama3.1:latest"
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 1,
+    "errors": 0,
+    "total": 7,
+    "pass_rate_percent": 71.43,
+    "total_estimated_cost_usd": 0.0
+  },
+  "highlights": {
+    "highest_scoring_model": "llama3.1:latest",
+    "fastest_model": "llama3.1:latest"
+  },
+  "model_comparison": [
+    {
+      "provider": "ollama",
+      "model": "llama3.1:latest",
+      "total_estimated_cost_usd": 0.0,
+      "average_estimated_cost_usd": 0.0,
+      "passed": 5,
+      "expected_failures": 1,
+      "unexpected_failures": 1,
+      "errors": 0,
+      "total": 7,
+      "pass_rate_percent": 71.43,
+      "average_response_time_seconds": 17.043,
+      "average_prompt_latency_seconds": 0.497,
+      "average_generation_latency_seconds": 15.467,
+      "average_model_load_seconds": 1.067,
+      "average_prompt_tokens": 19.286,
+      "average_output_tokens": 88.571,
+      "average_prompt_tokens_per_second": 38.906,
+      "average_generation_tokens_per_second": 7.41
+    }
+  ],
+  "results": [
+    {
+      "test_id": "greeting-001",
+      "name": "Basic greeting",
+      "category": "functional",
+      "prompt": "Say hello",
+      "provider": "ollama",
+      "model": "llama3.1:latest",
+      "estimated_cost_usd": 0.0,
+      "actual_response": "Hello! How can I assist you today?",
+      "passed": true,
+      "status": "PASS",
+      "expected_to_fail": false,
+      "assertion_type": "contains",
+      "expected": "Hello",
+      "reason": "Response contains expected text: 'Hello'",
+      "evaluation_results": [
+        {
+          "metric_name": "contains",
+          "score": 1.0,
+          "passed": true,
+          "threshold": 1.0,
+          "engine": "builtin",
+          "reason": "Response contains expected text: 'Hello'"
+        }
+      ],
+      "response_time_seconds": 6.874161500003538,
+      "prompt_tokens": 12,
+      "output_tokens": 10,
+      "prompt_latency_seconds": 0.359176,
+      "generation_latency_seconds": 1.509418,
+      "model_load_seconds": 4.9900159,
+      "prompt_tokens_per_second": 33.40980466400873,
+      "generation_tokens_per_second": 6.625070060115886
+    },
+    {
+      "test_id": "python-001",
+      "name": "Python creator",
+      "category": "knowledge",
+      "prompt": "Who created Python?",
+      "provider": "ollama",
+      "model": "llama3.1:latest",
+      "estimated_cost_usd": 0.0,
+      "actual_response": "Python was created by Guido van Rossum, a Dutch computer programmer. He began working on the language in the late 1980s and released the first version of Python in 1991. Van Rossum is often referred to as the \"Benevolent Dictator for Life\" (BDFL) of the Python project.\n\nGuido van Rossum was born in 1956 in the Netherlands. He earned his undergraduate degree in mathematics from the University of Amsterdam and later moved to the United States to pursue a Ph.D. in computer science at the University of Amsterdam's branch in California, but he dropped out without completing his dissertation.\n\nVan Rossum began working on Python as a side project while he was employed at the National Research Institute for Mathematics and Computer Science in the Netherlands. He chose the name \"Python\" because he was a fan of the British comedy group Monty Python's Flying Circus.\n\nAfter releasing the first version of Python, van Rossum continued to work on the language and released new versions regularly. In 2000, he founded the Python Software Foundation (PSF) to oversee the development and maintenance of the language.\n\nIn 2018, Guido van Rossum announced that he would be stepping down as the BDFL of the Python project, and C\u00e9dric Krier took over as the new lead. However, van Rossum remains involved with the community and is still a prominent figure in the world of programming languages.",
+      "passed": true,
+      "status": "PASS",
+      "expected_to_fail": false,
+      "assertion_type": "contains",
+      "expected": "Guido van Rossum",
+      "reason": "Response contains expected text: 'Guido van Rossum'",
+      "evaluation_results": [
+        {
+          "metric_name": "contains",
+          "score": 1.0,
+          "passed": true,
+          "threshold": 1.0,
+          "engine": "builtin",
+          "reason": "Response contains expected text: 'Guido van Rossum'"
+        }
+      ],
+      "response_time_seconds": 49.99763719999464,
+      "prompt_tokens": 14,
+      "output_tokens": 295,
+      "prompt_latency_seconds": 0.315341,
+      "generation_latency_seconds": 49.296636,
+      "model_load_seconds": 0.3774926,
+      "prompt_tokens_per_second": 44.39638359743896,
+      "generation_tokens_per_second": 5.984181151833566
+    },
+    {
+      "test_id": "Florida State",
+      "name": "Basic history",
+      "category": "informational",
+      "prompt": "What tiny biting insect in coastal Florida is commonly called a name starts with no ? Answer with only the insect name.",
+      "provider": "ollama",
+      "model": "llama3.1:latest",
+      "estimated_cost_usd": 0.0,
+      "actual_response": "No-see-um (Note: also known as Noesee, Noh-see-um)",
+      "passed": true,
+      "status": "PASS",
+      "expected_to_fail": false,
+      "assertion_type": "icontains",
+      "expected": "no-see",
+      "reason": "Response contains expected text ignoring case: 'no-see'",
+      "evaluation_results": [
+        {
+          "metric_name": "icontains",
+          "score": 1.0,
+          "passed": true,
+          "threshold": 1.0,
+          "engine": "builtin",
+          "reason": "Response contains expected text ignoring case: 'no-see'"
+        }
+      ],
+      "response_time_seconds": 5.055308300004981,
+      "prompt_tokens": 33,
+      "output_tokens": 23,
+      "prompt_latency_seconds": 0.759896,
+      "generation_latency_seconds": 3.809953,
+      "model_load_seconds": 0.4593975,
+      "prompt_tokens_per_second": 43.42699527303736,
+      "generation_tokens_per_second": 6.036819876780632
+    },
+    {
+      "test_id": "intentional-failure",
+      "name": "Intentional failure",
+      "category": "functional",
+      "prompt": "Answer with only the color blue.",
+      "provider": "ollama",
+      "model": "llama3.1:latest",
+      "estimated_cost_usd": 0.0,
+      "actual_response": "Blue",
+      "passed": true,
+      "status": "XFAIL",
+      "expected_to_fail": true,
+      "assertion_type": "contains",
+      "expected": "orange",
+      "reason": "Response does not contain expected text: 'orange'",
+      "evaluation_results": [
+        {
+          "metric_name": "contains",
+          "score": 0.0,
+          "passed": false,
+          "threshold": 1.0,
+          "engine": "builtin",
+          "reason": "Response does not contain expected text: 'orange'"
+        }
+      ],
+      "response_time_seconds": 1.0614544999989448,
+      "prompt_tokens": 17,
+      "output_tokens": 2,
+      "prompt_latency_seconds": 0.467346,
+      "generation_latency_seconds": 0.185904,
+      "model_load_seconds": 0.4011653,
+      "prompt_tokens_per_second": 36.37561892045722,
+      "generation_tokens_per_second": 10.758240812462345
+    },
+    {
+      "test_id": "unexpected-failure-demo",
+      "name": "Unexpected failure demonstration",
+      "category": "framework-validation",
+      "prompt": "Start your response with the words: Python is",
+      "provider": "ollama",
+      "model": "llama3.1:latest",
+      "estimated_cost_usd": 0.0,
+      "actual_response": "Python is a high-level, interpreted programming language that is widely used for various purposes such as web development, scientific computing, data analysis, artificial intelligence, and more. Its simplicity, readability, and large community of developers have made it one of the most popular programming languages in recent years.\n\nSome of its key features include:\n\n* Easy to learn and use\n* Dynamic typing, which means you don't need to declare variable types before using them\n* Large standard library with modules for various tasks such as file I/O, networking, and data structures\n* Extensive support for object-oriented programming (OOP) concepts like classes, inheritance, and polymorphism\n* Cross-platform compatibility, allowing Python code to run on Windows, macOS, Linux, and other operating systems\n\nPython's versatility has led to its adoption in a wide range of applications, including:\n\n* Web development with frameworks like Django and Flask\n* Data analysis and science with libraries like NumPy, pandas, and scikit-learn\n* Artificial intelligence and machine learning with libraries like TensorFlow and Keras\n* Automation tasks with scripts that can interact with other systems and tools\n\nOverall, Python's unique combination of ease of use, flexibility, and powerful features has made it a go-to language for many developers.",
+      "passed": false,
+      "status": "FAIL",
+      "expected_to_fail": false,
+      "assertion_type": "starts_with",
+      "expected": "This text should never match",
+      "reason": "Response does not start with expected text: 'This text should never match'",
+      "evaluation_results": [
+        {
+          "metric_name": "starts_with",
+          "score": 0.0,
+          "passed": false,
+          "threshold": 1.0,
+          "engine": "builtin",
+          "reason": "Response does not start with expected text: 'This text should never match'"
+        }
+      ],
+      "response_time_seconds": 48.87793079999392,
+      "prompt_tokens": 19,
+      "output_tokens": 256,
+      "prompt_latency_seconds": 0.632411,
+      "generation_latency_seconds": 47.86298,
+      "model_load_seconds": 0.3767816,
+      "prompt_tokens_per_second": 30.043753192148777,
+      "generation_tokens_per_second": 5.348601361636906
+    },
+    {
+      "test_id": "ending-001",
+      "name": "Sentence punctuation",
+      "category": "format",
+      "prompt": "Write one sentence about artificial intelligence and end it with a period.",
+      "provider": "ollama",
+      "model": "llama3.1:latest",
+      "estimated_cost_usd": 0.0,
+      "actual_response": "Artificial intelligence refers to the development of computer systems that can perform tasks that typically require human intelligence, such as learning, problem-solving, and decision-making.",
+      "passed": true,
+      "status": "PASS",
+      "expected_to_fail": false,
+      "assertion_type": "ends_with",
+      "expected": ".",
+      "reason": "Response ends with expected text: '.'",
+      "evaluation_results": [
+        {
+          "metric_name": "ends_with",
+          "score": 1.0,
+          "passed": true,
+          "threshold": 1.0,
+          "engine": "builtin",
+          "reason": "Response ends with expected text: '.'"
+        }
+      ],
+      "response_time_seconds": 6.394906599998649,
+      "prompt_tokens": 23,
+      "output_tokens": 32,
+      "prompt_latency_seconds": 0.535017,
+      "generation_latency_seconds": 5.42537,
+      "model_load_seconds": 0.4150808,
+      "prompt_tokens_per_second": 42.98928819084254,
+      "generation_tokens_per_second": 5.898215236933149
+    },
+    {
+      "test_id": "regex-001",
+      "name": "Three-digit number",
+      "category": "format",
+      "prompt": "Return only the number 123.",
+      "provider": "ollama",
+      "model": "llama3.1:latest",
+      "estimated_cost_usd": 0.0,
+      "actual_response": "123",
+      "passed": true,
+      "status": "PASS",
+      "expected_to_fail": false,
+      "assertion_type": "regex",
+      "expected": "^\\d{3}$",
+      "reason": "Response matches regex pattern: '^\\\\d{3}$'",
+      "evaluation_results": [
+        {
+          "metric_name": "regex",
+          "score": 1.0,
+          "passed": true,
+          "threshold": 1.0,
+          "engine": "builtin",
+          "reason": "Response matches regex pattern: '^\\\\d{3}$'"
+        }
+      ],
+      "response_time_seconds": 1.0430521999951452,
+      "prompt_tokens": 17,
+      "output_tokens": 2,
+      "prompt_latency_seconds": 0.407642,
+      "generation_latency_seconds": 0.178314,
+      "model_load_seconds": 0.4460955,
+      "prompt_tokens_per_second": 41.70325923236565,
+      "generation_tokens_per_second": 11.216169229561336
+    }
+  ]
+}
