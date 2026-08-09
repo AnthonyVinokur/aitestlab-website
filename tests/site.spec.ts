@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 const primaryRoutes = [
   ["Features", "/features"],
   ["Atlas", "/atlas"],
+  ["Results", "/results"],
   ["Reports", "/reports"],
   ["Docs", "/documentation"],
   ["Roadmap", "/roadmap"],
@@ -27,6 +28,17 @@ for (const [label, route] of primaryRoutes) {
     await expect(page.locator("main")).toBeVisible();
   });
 }
+
+test("results page renders real AI Test Lab report data", async ({ page }) => {
+  await page.goto("/results");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Latest evaluation run.");
+  await expect(page.getByText("71.4%", { exact: true })).toBeVisible();
+  await expect(page.getByText("llama3.1:latest", { exact: true }).first()).toBeVisible();
+  await expect(page.getByText("unexpected-failure-demo", { exact: true })).toBeVisible();
+  await expect(page.getByText("intentional-failure", { exact: true })).toBeVisible();
+  await expect(page.locator('[data-status="FAIL"]').first()).toBeVisible();
+  await expect(page.locator('[data-status="XFAIL"]').first()).toBeVisible();
+});
 
 test("unknown routes render the custom not-found experience", async ({ page }) => {
   const response = await page.goto("/definitely-not-a-real-route");

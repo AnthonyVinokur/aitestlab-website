@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { StatusIndicator } from "@/components/ui/status-indicator";
+import { LatestEvaluationPreview } from "@/components/evaluation/latest-evaluation-preview";
 
 export const metadata: Metadata = {
   title: "AI Test Lab | Automated LLM Evaluation & AI Quality Engineering",
@@ -69,108 +69,7 @@ export default function HomePage() {
   description="AI Test Lab turns prompts, models, evaluators, and quality thresholds into repeatable engineering tests that can run before every release."
 >
   <div className="home-hero-product">
-    <Card elevated className="home-console">
-      <div className="home-console-toolbar">
-        <div className="home-console-toolbar-left">
-          <span className="home-console-dot" />
-          <span className="home-console-dot" />
-          <span className="home-console-dot" />
-        </div>
-
-        <span className="home-console-product-name">AI TEST LAB</span>
-
-        <Badge>RUN #184</Badge>
-      </div>
-
-      <div className="home-console-header">
-        <div>
-          <span className="home-console-kicker">evaluation run</span>
-          <strong>release-candidate / llama3.1</strong>
-        </div>
-
-        <StatusIndicator status="fail" label="GATE FAILED" />
-      </div>
-
-      <div className="home-console-meta">
-        <div>
-          <small>Dataset</small>
-          <strong>release-regression</strong>
-        </div>
-
-        <div>
-          <small>Evaluator</small>
-          <strong>native + judge</strong>
-        </div>
-
-        <div>
-          <small>Threshold</small>
-          <strong>95%</strong>
-        </div>
-      </div>
-
-      <div className="home-console-results" aria-label="Evaluation results">
-        <div>
-          <span>
-            <code>greeting-001</code>
-            <small>contains assertion</small>
-          </span>
-          <StatusIndicator status="pass" />
-        </div>
-
-        <div>
-          <span>
-            <code>python-001</code>
-            <small>correctness</small>
-          </span>
-          <StatusIndicator status="pass" />
-        </div>
-
-        <div className="home-console-result-failed">
-          <span>
-            <code>safety-003</code>
-            <small>policy regression detected</small>
-          </span>
-          <StatusIndicator status="fail" />
-        </div>
-
-        <div>
-          <span>
-            <code>regression-012</code>
-            <small>semantic similarity</small>
-          </span>
-          <StatusIndicator status="pass" />
-        </div>
-      </div>
-
-      <div className="home-console-footer">
-        <div className="home-console-summary">
-          <span>
-            <small>Passed</small>
-            <strong>11</strong>
-          </span>
-          <span>
-            <small>Failed</small>
-            <strong>1</strong>
-          </span>
-          <span>
-            <small>Errors</small>
-            <strong>0</strong>
-          </span>
-        </div>
-
-        <div className="home-console-score">
-          <small>QUALITY SCORE</small>
-          <strong>91.7%</strong>
-          <span>required 95%</span>
-        </div>
-      </div>
-    </Card>
-
-    <div className="home-hero-signal">
-      <span className="home-hero-signal-dot" />
-      <span>Evaluation complete</span>
-      <strong>Release blocked</strong>
-    </div>
+    <LatestEvaluationPreview />
   </div>
 
   <div className="home-hero-actions">

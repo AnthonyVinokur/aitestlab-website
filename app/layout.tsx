@@ -50,7 +50,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body>
         <a className="skip-link" href="#main-content">Skip to content</a>
         <SiteHeader />
