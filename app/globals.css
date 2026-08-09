@@ -1412,6 +1412,7 @@ p {
   .header-cta {
     display: none;
   }
+
   .feature-capability-grid {
   grid-template-columns: 1fr;
 }
@@ -2503,7 +2504,7 @@ p {
   .home-proof-grid {
     grid-template-columns: 1fr;
   }
-
+}
 
 /* W2.4 — scientific AI visual system + real evaluation evidence */
 :root {
@@ -3065,16 +3066,16 @@ p {
   }
 
    main > .section {
-    padding-block: 68px;
+    padding-block: 54px;
   }
 
   main > .section.section-tight {
-    padding-top: 60px;
-    padding-bottom: 68px;
+    padding-top: 48px;
+    padding-bottom: 54px;
   }
 
   main > .home-final-section {
-    padding-top: 76px;
-    padding-bottom: 96px;
+    padding-top: 64px;
+    padding-bottom: 84px;
   }
 }
