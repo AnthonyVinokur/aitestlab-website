@@ -195,18 +195,28 @@ export default function HomePage() {
   </div>
 </PageHero>
 
-<section className="section section-tight">
+<section className="section section-tight home-proof-section">
   <Container>
+    <SectionHeading
+      eyebrow="How AI Test Lab works"
+      title="From AI output to engineering evidence."
+    >
+      <p>
+        AI Test Lab turns test definitions, model responses, and evaluator
+        results into normalized evidence that engineering teams can use for
+        repeatable release decisions.
+      </p>
+    </SectionHeading>
+
     <div
       className="home-pipeline"
       aria-label="AI Test Lab evaluation pipeline"
     >
       {[
-        "Dataset",
-        "Model",
-        "Evaluation",
-        "Metrics",
-        "Report",
+        "Test Cases",
+        "Models",
+        "Evaluators",
+        "Normalized Results",
         "Quality Gate",
       ].map((step, index, items) => (
         <div className="home-pipeline-step" key={step}>
@@ -219,6 +229,35 @@ export default function HomePage() {
           ) : null}
         </div>
       ))}
+    </div>
+
+    <div className="home-proof-grid">
+      <Card className="home-proof-card">
+        <Badge>01</Badge>
+        <h3>Repeatable</h3>
+        <p>
+          Run version-controlled evaluation definitions repeatedly as prompts,
+          models, and application behavior change.
+        </p>
+      </Card>
+
+      <Card className="home-proof-card">
+        <Badge>02</Badge>
+        <h3>Engine-agnostic</h3>
+        <p>
+          Combine native assertions with specialized evaluation engines while
+          keeping their results behind one normalized evidence model.
+        </p>
+      </Card>
+
+      <Card className="home-proof-card">
+        <Badge>03</Badge>
+        <h3>Release-ready</h3>
+        <p>
+          Convert evaluation outcomes into structured evidence that reporting
+          and CI/CD quality gates can consume.
+        </p>
+      </Card>
     </div>
   </Container>
 </section>
