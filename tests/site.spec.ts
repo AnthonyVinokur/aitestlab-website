@@ -11,8 +11,12 @@ const primaryRoutes = [
 test("home page presents the product and a working primary CTA", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveTitle(/AI Test Lab/);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Reliable AI needs evidence");
-  await page.getByRole("link", { name: "Explore the framework" }).click();
+
+  await expect(page.getByRole("heading", { level: 1 }))
+  .toContainText("Test AI systems with evidence, not intuition.");
+
+  await page.getByRole("link", { name: "Explore AI Test Lab" }).click();
+
   await expect(page).toHaveURL(/\/features$/);
 });
 
