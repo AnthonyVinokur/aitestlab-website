@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
+import { BrandMark } from "@/components/brand-mark";
 import { Container } from "@/components/container";
 import { LatestEvaluationPreview } from "@/components/evaluation/latest-evaluation-preview";
 import { PageHero } from "@/components/page-hero";
@@ -81,8 +82,18 @@ export default function HomePage() {
   return (
     <>
       <PageHero
-        eyebrow="AI QUALITY ENGINEERING"
-        title="Test AI systems with evidence, not intuition."
+        eyebrow={
+          <span className="hero-brand-eyebrow">
+            <BrandMark className="hero-brand-symbol" />
+            <span>AI QUALITY ENGINEERING</span>
+          </span>
+        }
+        title={
+          <>
+            Test AI systems with <span className="hero-evidence">evidence</span>
+            , not intuition.
+          </>
+        }
         description="AI Test Lab turns prompts, models, evaluators, and quality thresholds into repeatable engineering tests that can run before every release."
       >
         <div className="home-hero-product">
@@ -140,7 +151,7 @@ export default function HomePage() {
 
                 {index < items.length - 1 ? (
                   <span className="home-pipeline-arrow" aria-hidden="true">
-                    →
+                    â†’
                   </span>
                 ) : null}
               </div>
@@ -209,7 +220,7 @@ export default function HomePage() {
               </div>
 
               <div className="home-architecture-connector" aria-hidden="true">
-                ↓
+                â†“
               </div>
 
               <div className="home-architecture-node">
@@ -219,7 +230,7 @@ export default function HomePage() {
               </div>
 
               <div className="home-architecture-connector" aria-hidden="true">
-                ↓
+                â†“
               </div>
 
               <div className="home-engine-grid">
@@ -245,7 +256,7 @@ export default function HomePage() {
               </div>
 
               <div className="home-architecture-connector" aria-hidden="true">
-                ↓
+                â†“
               </div>
 
               <div className="home-architecture-node">

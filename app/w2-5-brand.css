@@ -1,0 +1,71 @@
+﻿/*
+ * Sprint W2.5 — Brand Integration + Hero Polish
+ * Brand-only refinements. W2.4 layout/evidence architecture stays untouched.
+ */
+
+.brand-fin-symbol {
+  display: block;
+  flex: 0 0 auto;
+  overflow: visible;
+  fill: currentColor;
+}
+
+.brand .brand-logo {
+  width: 34px;
+  height: 34px;
+  color: var(--accent);
+  fill: currentColor;
+  stroke: none;
+}
+
+.brand .brand-logo path:last-child {
+  fill: currentColor;
+}
+
+.brand-wordmark {
+  color: var(--text);
+  font-size: 0.94rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.page-hero-content h1:has(.hero-evidence) {
+  max-width: 650px;
+  font-size: clamp(3rem, 5.6vw, 5.25rem);
+  line-height: 1.06;
+}
+
+.hero-brand-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.eyebrow .hero-brand-symbol {
+  width: 20px;
+  height: 20px;
+  color: var(--accent);
+  fill: currentColor;
+  stroke: none;
+}
+
+.eyebrow .hero-brand-symbol path {
+  fill: currentColor;
+}
+
+.hero-evidence {
+  color: var(--color-brand-400);
+}
+
+@media (max-width: 760px) {
+  .brand .brand-logo {
+    width: 30px;
+    height: 30px;
+  }
+
+  .brand-wordmark {
+    font-size: 0.82rem;
+    letter-spacing: 0.07em;
+  }
+}

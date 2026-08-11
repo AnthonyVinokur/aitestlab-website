@@ -1,8 +1,9 @@
-import type { Metadata, Viewport } from "next";
+﻿import type { Metadata, Viewport } from "next";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
+import "./w2-5-brand.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -29,7 +30,14 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: "AI Test Lab | Evidence for Reliable AI",
     description: siteConfig.description,
-    images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "AI Test Lab — evidence for reliable AI systems" }],
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "AI Test Lab â€” evidence for reliable AI systems",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -48,11 +56,15 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body>
-        <a className="skip-link" href="#main-content">Skip to content</a>
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
         <SiteHeader />
         <main id="main-content">{children}</main>
         <SiteFooter />
