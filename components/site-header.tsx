@@ -1,4 +1,5 @@
-import Link from "next/link";
+﻿import Link from "next/link";
+import { BrandMark } from "@/components/brand-mark";
 import { Container } from "@/components/container";
 import { siteConfig } from "@/lib/site";
 
@@ -19,11 +20,8 @@ export function SiteHeader() {
     <header className="site-header">
       <Container className="header-inner">
         <Link className="brand" href="/" aria-label={`${siteConfig.name} home`}>
-          <svg className="brand-logo" viewBox="0 0 48 48" aria-hidden="true">
-            <path d="M8 12.5 24 4l16 8.5v23L24 44 8 35.5v-23Z" />
-            <path d="m15 29 9-14 9 14M18 25h12" />
-          </svg>
-          <span>{siteConfig.name}</span>
+          <BrandMark className="brand-logo" />
+          <span className="brand-wordmark">AI TEST LAB</span>
         </Link>
 
         <nav className="desktop-nav" aria-label="Primary navigation">

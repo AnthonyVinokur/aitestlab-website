@@ -1,9 +1,9 @@
-import type { ReactNode } from "react";
+﻿import type { ReactNode } from "react";
 import { Container } from "@/components/container";
 
 type PageHeroProps = {
-  eyebrow: string;
-  title: string;
+  eyebrow: ReactNode;
+  title: ReactNode;
   description: string;
   children?: ReactNode;
 };
@@ -23,11 +23,7 @@ export function PageHero({
           <p className="page-lead">{description}</p>
         </div>
 
-        {children ? (
-          <div className="page-hero-aside">
-            {children}
-          </div>
-        ) : null}
+        {children ? <div className="page-hero-aside">{children}</div> : null}
       </Container>
     </section>
   );
