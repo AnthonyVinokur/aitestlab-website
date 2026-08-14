@@ -2595,6 +2595,65 @@ p {
 .results-metric>div{display:grid;gap:2px}.results-metric span,.results-metric small{color:var(--muted);font-size:.7rem}
 .metric-pass{color:var(--accent)!important;font-weight:900}.metric-fail{color:var(--danger)!important;font-weight:900}
 .results-empty{color:var(--muted)}
+
+/* W2.6 — Evidence drill-down */
+
+.result-entry-attention {
+  border-bottom-color: rgba(255, 141, 141, 0.22);
+}
+
+.result-entry-attention > summary {
+  position: relative;
+}
+
+.result-entry-attention > summary::before {
+  position: absolute;
+  left: -14px;
+  width: 3px;
+  height: 34px;
+  content: "";
+  background: var(--color-danger);
+  border-radius: var(--radius-pill);
+}
+
+.result-fact {
+  display: grid;
+  gap: 5px;
+}
+
+.result-fact + .result-fact {
+  margin-top: 16px;
+}
+
+.result-fact > span,
+.result-fact-grid span {
+  color: var(--muted);
+  font: 700 0.68rem/1.2 var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+.result-fact code {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.results-metric {
+  grid-template-columns:
+    minmax(160px, 1.4fr)
+    0.55fr
+    0.55fr
+    62px;
+}
+
+.results-metric-reason {
+  grid-column: 1 / -1;
+  margin: 4px 0 0;
+  padding-top: 10px;
+  color: var(--muted-strong);
+  border-top: 1px solid var(--surface-hairline);
+  font-size: 0.82rem;
+}
+
 .results-run-signal {
   display: inline-flex;
   width: fit-content;
