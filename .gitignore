@@ -36,3 +36,6 @@ pnpm-debug.log*
 
 # typescript
 *.tsbuildinfo
+
+# Next.js generated TypeScript environment
+next-env.d.ts
