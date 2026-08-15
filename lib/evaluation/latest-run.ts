@@ -1,7 +1,10 @@
 import rawLatestResults from "@/data/latest-results.json";
 import { adaptEvaluationReport } from "./adapter";
-import type { EvaluationRun, RawEvaluationReport } from "./types";
+import type { EvaluationRun } from "./types";
+import { validateEvaluationReport } from "./validation";
 
 export function getLatestEvaluationRun(): EvaluationRun {
-  return adaptEvaluationReport(rawLatestResults as RawEvaluationReport);
+  validateEvaluationReport(rawLatestResults);
+
+  return adaptEvaluationReport(rawLatestResults);
 }
