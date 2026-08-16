@@ -40,6 +40,37 @@ test("results page renders real AI Test Lab report data", async ({ page }) => {
   await expect(page.locator('[data-status="XFAIL"]').first()).toBeVisible();
 });
 
+test("results page exposes evidence for an unexpected failure", async ({ page }) => {
+  await page.goto("/results");
+
+  const failure = page.locator("details").filter({
+    hasText: "unexpected-failure-demo",
+  });
+
+  await expect(failure).toHaveAttribute("open", "");
+  await expect(
+    failure.getByText("Start your response with the words: Python is", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    failure.getByText("This text should never match", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    failure.locator(".result-narrative").getByText(
+      "Response does not start with expected text: 'This text should never match'",
+      { exact: true },
+    ),
+  ).toBeVisible();
+  await expect(
+    failure.locator(".result-evidence").getByText("starts_with", { exact: true }),
+  ).toBeVisible();
+
+  const metrics = failure.locator(".results-metrics");
+  await expect(metrics.getByText("0.000", { exact: true })).toBeVisible();
+  await expect(metrics.getByText("1.000", { exact: true })).toBeVisible();
+});
+
 test("unknown routes render the custom not-found experience", async ({ page }) => {
   const response = await page.goto("/definitely-not-a-real-route");
   expect(response?.status()).toBe(404);

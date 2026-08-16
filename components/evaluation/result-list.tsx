@@ -7,6 +7,20 @@ import {
 } from "@/lib/evaluation/formatters";
 import { EvaluationStatusPill } from "./status-pill";
 
+function metricProvenance(
+  profileName: string | null,
+  profileVersion: string | null,
+  evaluatorModel: string | null,
+): string | null {
+  const profile = profileName
+    ? `${profileName}${profileVersion ? `@${profileVersion}` : ""}`
+    : null;
+
+  return [profile, evaluatorModel]
+    .filter((value): value is string => Boolean(value))
+    .join(" · ") || null;
+}
+
 function MetricRows({ result }: { result: EvaluationCase }) {
   if (!result.metrics.length) {
     return (
@@ -17,43 +31,76 @@ function MetricRows({ result }: { result: EvaluationCase }) {
   }
 
   return (
-    <div className="results-metrics">
-      {result.metrics.map((metric, index) => (
-        <div
-          className="results-metric"
-          key={`${metric.engine}-${metric.name}-${index}`}
-        >
-          <div>
-            <span>{metric.engine}</span>
-            <strong>{metric.name}</strong>
-          </div>
+    <div className="results-metrics" aria-label="Normalized metric evidence">
+      {result.metrics.map((metric, index) => {
+        const provenance = metricProvenance(
+          metric.profileName,
+          metric.profileVersion,
+          metric.evaluatorModel,
+        );
 
-          <div>
-            <small>Score</small>
-            <strong>{formatNumber(metric.score, 3)}</strong>
-          </div>
-
-          <div>
-            <small>Threshold</small>
-            <strong>{formatNumber(metric.threshold, 3)}</strong>
-          </div>
-
-          <span
-            className={
-              metric.passed === false ? "metric-fail" : "metric-pass"
-            }
+        return (
+          <div
+            className="results-metric"
+            key={`${metric.engine}-${metric.name}-${index}`}
           >
-            {metric.passed == null
-              ? "—"
-              : metric.passed
-                ? "PASS"
-                : "FAIL"}
-          </span>
+            <div>
+              <span>{metric.engine}</span>
+              <strong>{metric.name}</strong>
+              {provenance ? <small>{provenance}</small> : null}
+            </div>
 
-          {metric.reason ? (
-            <p className="results-metric-reason">{metric.reason}</p>
-          ) : null}
-        </div>
+            <div>
+              <small>Score</small>
+              <strong>{formatNumber(metric.score, 3)}</strong>
+            </div>
+
+            <div>
+              <small>Threshold</small>
+              <strong>{formatNumber(metric.threshold, 3)}</strong>
+            </div>
+
+            <span
+              className={
+                metric.passed === false ? "metric-fail" : "metric-pass"
+              }
+            >
+              {metric.passed == null
+                ? "—"
+                : metric.passed
+                  ? "PASS"
+                  : "FAIL"}
+            </span>
+
+            {metric.reason ? (
+              <p className="results-metric-reason">{metric.reason}</p>
+            ) : null}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function EngineExecutionEvidence({ result }: { result: EvaluationCase }) {
+  if (!result.engineResults.length) {
+    return null;
+  }
+
+  return (
+    <div className="result-fact" aria-label="Evaluation engine execution">
+      <span>Engine execution</span>
+      {result.engineResults.map((engine, index) => (
+        <p key={`${engine.engine}-${index}`}>
+          <strong>{engine.engine}</strong>
+          {" · "}
+          {engine.succeeded == null
+            ? "UNKNOWN"
+            : engine.succeeded
+              ? "SUCCEEDED"
+              : "FAILED"}
+          {engine.error ? ` · ${engine.error}` : ""}
+        </p>
       ))}
     </div>
   );
@@ -137,6 +184,8 @@ export function EvaluationResultList({
                   <span>Expected failure</span>
                   <strong>{result.expectedToFail ? "YES" : "NO"}</strong>
                 </div>
+
+                <EngineExecutionEvidence result={result} />
 
                 <div className="result-fact-grid">
                   <div>

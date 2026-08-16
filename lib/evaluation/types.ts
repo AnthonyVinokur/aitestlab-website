@@ -8,6 +8,17 @@ export interface RawEvaluationMetric {
   threshold?: number | null;
   engine?: string;
   reason?: string | null;
+  runtime_options?: Record<string, unknown>;
+  profile_name?: string | null;
+  profile_version?: string | null;
+  evaluator_model?: string | null;
+  [key: string]: unknown;
+}
+
+export interface RawEvaluationEngineResult {
+  engine?: string;
+  succeeded?: boolean;
+  error?: string | null;
   [key: string]: unknown;
 }
 
@@ -27,6 +38,7 @@ export interface RawEvaluationResult {
   expected?: unknown;
   reason?: string;
   evaluation_results?: RawEvaluationMetric[];
+  engine_results?: RawEvaluationEngineResult[];
   response_time_seconds?: number | null;
   prompt_tokens?: number | null;
   output_tokens?: number | null;
@@ -89,6 +101,15 @@ export interface EvaluationMetric {
   threshold: number | null;
   passed: boolean | null;
   reason: string | null;
+  profileName: string | null;
+  profileVersion: string | null;
+  evaluatorModel: string | null;
+}
+
+export interface EvaluationEngineResult {
+  engine: string;
+  succeeded: boolean | null;
+  error: string | null;
 }
 
 export interface EvaluationCase {
@@ -114,6 +135,7 @@ export interface EvaluationCase {
   promptTokensPerSecond: number | null;
   generationTokensPerSecond: number | null;
   metrics: EvaluationMetric[];
+  engineResults: EvaluationEngineResult[];
 }
 
 export interface EvaluationModelSummary {

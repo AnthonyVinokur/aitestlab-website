@@ -1,5 +1,6 @@
 import type {
   EvaluationCase,
+  EvaluationEngineResult,
   EvaluationMetric,
   EvaluationModelSummary,
   EvaluationRun,
@@ -14,6 +15,9 @@ const numberOrZero = (value: unknown): number => numberOrNull(value) ?? 0;
 
 const stringOr = (value: unknown, fallback = "unknown"): string =>
   typeof value === "string" && value.trim() ? value : fallback;
+
+const nullableString = (value: unknown): string | null =>
+  typeof value === "string" && value.trim() ? value : null;
 
 const expectedAsText = (value: unknown): string => {
   if (typeof value === "string") return value;
@@ -46,7 +50,23 @@ function adaptMetric(metric: NonNullable<RawEvaluationResult["evaluation_results
     score: numberOrNull(metric.score),
     threshold: numberOrNull(metric.threshold),
     passed: typeof metric.passed === "boolean" ? metric.passed : null,
-    reason: typeof metric.reason === "string" ? metric.reason : null,
+    reason: nullableString(metric.reason),
+    profileName: nullableString(metric.profile_name),
+    profileVersion: nullableString(metric.profile_version),
+    evaluatorModel: nullableString(metric.evaluator_model),
+  };
+}
+
+function adaptEngineResult(
+  engineResult: NonNullable<RawEvaluationResult["engine_results"]>[number],
+): EvaluationEngineResult {
+  return {
+    engine: stringOr(engineResult.engine, "unknown"),
+    succeeded:
+      typeof engineResult.succeeded === "boolean"
+        ? engineResult.succeeded
+        : null,
+    error: nullableString(engineResult.error),
   };
 }
 
@@ -75,6 +95,9 @@ function adaptResult(result: RawEvaluationResult): EvaluationCase {
     generationTokensPerSecond: numberOrNull(result.generation_tokens_per_second),
     metrics: Array.isArray(result.evaluation_results)
       ? result.evaluation_results.map(adaptMetric)
+      : [],
+    engineResults: Array.isArray(result.engine_results)
+      ? result.engine_results.map(adaptEngineResult)
       : [],
   };
 }
