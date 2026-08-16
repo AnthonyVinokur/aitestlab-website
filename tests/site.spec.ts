@@ -124,3 +124,31 @@ test("results page exposes the normalized run decision", async ({ page }) => {
     }),
   ).toBeVisible();
 });
+
+test("results page exposes evaluation run traceability", async ({ page }) => {
+  await page.goto("/results");
+
+  const context = page.locator('dl[aria-label="Run traceability"]');
+
+  await expect(context).toBeVisible();
+
+  await expect(context.getByText("Run ID", { exact: true })).toBeVisible();
+
+  await expect(
+    context.getByText("llama3.1:latest", { exact: true }),
+  ).toBeVisible();
+
+  await expect(context.getByText("ollama", { exact: true })).toBeVisible();
+
+  await expect(
+    context.getByText("Evaluation profile", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    context.getByText("Not reported", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    context.getByText("Report contract", { exact: true }),
+  ).toBeVisible();
+});
