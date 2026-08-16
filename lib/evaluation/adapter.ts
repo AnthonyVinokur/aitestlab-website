@@ -5,6 +5,7 @@ import type {
   EvaluationMetric,
   EvaluationModelSummary,
   EvaluationRun,
+  EvaluationRunContext,
   RawEvaluationReport,
   RawEvaluationResult,
 } from "./types";
@@ -19,6 +20,18 @@ const stringOr = (value: unknown, fallback = "unknown"): string =>
 
 const nullableString = (value: unknown): string | null =>
   typeof value === "string" && value.trim() ? value : null;
+
+const firstNullableString = (values: unknown[]): string | null => {
+  for (const value of values) {
+    const normalized = nullableString(value);
+
+    if (normalized) {
+      return normalized;
+    }
+  }
+
+  return null;
+};
 
 const expectedAsText = (value: unknown): string => {
   if (typeof value === "string") return value;
@@ -134,6 +147,36 @@ function adaptModelSummary(
   };
 }
 
+function deriveRunContext(raw: RawEvaluationReport): EvaluationRunContext {
+  const rawResults = Array.isArray(raw.results) ? raw.results : [];
+
+  const firstModelSummary = Array.isArray(raw.model_comparison)
+    ? raw.model_comparison[0]
+    : undefined;
+
+  const metrics = rawResults.flatMap((result) =>
+    Array.isArray(result.evaluation_results) ? result.evaluation_results : [],
+  );
+
+  return {
+    provider:
+      nullableString(firstModelSummary?.provider) ??
+      firstNullableString(rawResults.map((result) => result.provider)),
+
+    model:
+      nullableString(firstModelSummary?.model) ??
+      firstNullableString(Array.isArray(raw.models) ? raw.models : []) ??
+      firstNullableString(rawResults.map((result) => result.model)),
+
+    profileName: firstNullableString(
+      metrics.map((metric) => metric.profile_name),
+    ),
+
+    profileVersion: firstNullableString(
+      metrics.map((metric) => metric.profile_version),
+    ),
+  };
+}
 function deriveDecision(
   unexpectedFailures: number,
   errors: number,
@@ -189,6 +232,7 @@ export function adaptEvaluationReport(raw: RawEvaluationReport): EvaluationRun {
     unexpectedFailures,
     errors,
     total,
+    context: deriveRunContext(raw),
     passRatePercent,
     totalEstimatedCostUsd: numberOrNull(summary.total_estimated_cost_usd),
     highestScoringModel:

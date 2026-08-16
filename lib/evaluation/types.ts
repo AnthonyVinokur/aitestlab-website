@@ -153,6 +153,12 @@ export interface EvaluationModelSummary {
   averageOutputTokens: number | null;
   totalEstimatedCostUsd: number | null;
 }
+export interface EvaluationRunContext {
+  provider: string | null;
+  model: string | null;
+  profileName: string | null;
+  profileVersion: string | null;
+}
 
 export interface EvaluationRun {
   schemaVersion: string;
@@ -172,6 +178,7 @@ export interface EvaluationRun {
   modelComparison: EvaluationModelSummary[];
   results: EvaluationCase[];
   decision: EvaluationDecision;
+  context: EvaluationRunContext;
 }
 export type EvaluationDecisionStatus = "CLEAR" | "ATTENTION_REQUIRED";
 

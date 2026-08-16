@@ -11,6 +11,12 @@ export function EvaluationRunSummary({ run }: { run: EvaluationRun }) {
   const model = run.modelComparison[0];
   const requiresAttention = run.decision.status === "ATTENTION_REQUIRED";
 
+  const profile = run.context.profileName
+    ? `${run.context.profileName}${
+        run.context.profileVersion ? ` · ${run.context.profileVersion}` : ""
+      }`
+    : "Not reported";
+
   return (
     <section className="results-overview" aria-label="Evaluation run summary">
       <div className="results-overview-copy">
@@ -22,13 +28,39 @@ export function EvaluationRunSummary({ run }: { run: EvaluationRun }) {
           failures, unexpected failures, and runtime telemetry separately.
         </p>
 
-        <div className="results-run-meta">
-          <span>{model?.provider ?? "unknown provider"}</span>
-          <strong>{model?.model ?? run.models[0] ?? "unknown model"}</strong>
-          <span>{formatGeneratedAt(run.generatedAt)}</span>
-          <span>{run.runId}</span>
-          <span>schema {run.schemaVersion}</span>
-        </div>
+        <dl className="results-run-context" aria-label="Run traceability">
+          <div>
+            <dt>Run ID</dt>
+            <dd>{run.runId}</dd>
+          </div>
+
+          <div>
+            <dt>Executed</dt>
+            <dd>{formatGeneratedAt(run.generatedAt)}</dd>
+          </div>
+
+          <div>
+            <dt>Model</dt>
+            <dd>{run.context.model ?? run.models[0] ?? "Not reported"}</dd>
+          </div>
+
+          <div>
+            <dt>Provider</dt>
+            <dd>{run.context.provider ?? "Not reported"}</dd>
+          </div>
+
+          <div>
+            <dt>Evaluation profile</dt>
+            <dd>{profile}</dd>
+          </div>
+
+          <div>
+            <dt>Report contract</dt>
+            <dd>
+              schema {run.schemaVersion} · {run.reportType}
+            </dd>
+          </div>
+        </dl>
       </div>
 
       <div className="results-score-field">
