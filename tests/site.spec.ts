@@ -31,11 +31,27 @@ for (const [label, route] of primaryRoutes) {
 
 test("results page renders real AI Test Lab report data", async ({ page }) => {
   await page.goto("/results");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Latest evaluation run.");
+
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "Latest evaluation run.",
+  );
+
   await expect(page.getByText("71.4%", { exact: true })).toBeVisible();
-  await expect(page.getByText("llama3.1:latest", { exact: true }).first()).toBeVisible();
-  await expect(page.getByText("unexpected-failure-demo", { exact: true })).toBeVisible();
-  await expect(page.getByText("intentional-failure", { exact: true })).toBeVisible();
+
+  await expect(
+    page.getByText("llama3.1:latest", { exact: true }).first(),
+  ).toBeVisible();
+
+  const resultsList = page.locator(".results-list");
+
+  await expect(
+    resultsList.getByText("unexpected-failure-demo", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    resultsList.getByText("intentional-failure", { exact: true }),
+  ).toBeVisible();
+
   await expect(page.locator('[data-status="FAIL"]').first()).toBeVisible();
   await expect(page.locator('[data-status="XFAIL"]').first()).toBeVisible();
 });
@@ -101,8 +117,12 @@ test("mobile navigation exposes the primary routes", async ({ page }) => {
 test("results page exposes the normalized run decision", async ({ page }) => {
   await page.goto("/results");
 
+  const summary = page.getByRole("region", {
+    name: "Evaluation run summary",
+  });
+
   await expect(
-    page.getByText("ATTENTION REQUIRED", { exact: true }),
+    summary.getByText("ATTENTION REQUIRED", { exact: true }),
   ).toBeVisible();
 
   await expect(
@@ -150,5 +170,35 @@ test("results page exposes evaluation run traceability", async ({ page }) => {
 
   await expect(
     context.getByText("Report contract", { exact: true }),
+  ).toBeVisible();
+});
+
+test("results page traces unexpected evidence to the run decision", async ({ page }) => {
+  await page.goto("/results");
+
+  const lineage = page.getByRole("region", {
+    name: "Evaluation decision lineage",
+  });
+
+  await expect(lineage).toBeVisible();
+
+  await expect(
+    lineage.getByText("Observed outcomes", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    lineage.getByText("1 unexpected · 0 errors", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    lineage.getByText("unexpected-failure-demo", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    lineage.getByText("Decision rule", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    lineage.getByText("ATTENTION REQUIRED", { exact: true }),
   ).toBeVisible();
 });
