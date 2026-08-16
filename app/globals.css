@@ -2788,6 +2788,120 @@ p {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+/* W2.11 — Evaluation decision lineage */
+
+.results-lineage-section {
+  padding-top: 56px;
+  padding-bottom: 72px;
+}
+
+.results-lineage {
+  border-top: 1px solid var(--surface-hairline);
+  border-bottom: 1px solid var(--surface-hairline);
+  padding: 48px 0;
+}
+
+.results-lineage .results-section-heading {
+  margin-bottom: 34px;
+}
+
+.results-lineage-flow {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto
+    minmax(0, 1.15fr)
+    auto
+    minmax(0, 1.15fr)
+    auto
+    minmax(0, 1fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.results-lineage-node {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--surface-hairline);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.results-lineage-node > span {
+  color: var(--muted);
+  font: 800 0.66rem/1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.results-lineage-node > strong {
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.results-lineage-node > small {
+  overflow-wrap: anywhere;
+  color: var(--muted-strong);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.results-lineage-arrow {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+}
+
+.results-lineage-decision-attention {
+  border-color: rgba(255, 141, 141, 0.24);
+  background: rgba(255, 141, 141, 0.06);
+}
+
+.results-lineage-decision-attention > strong {
+  color: var(--color-danger);
+}
+
+.results-lineage-decision-clear {
+  border-color: rgba(85, 214, 190, 0.24);
+  background: rgba(85, 214, 190, 0.06);
+}
+
+.results-lineage-decision-clear > strong {
+  color: var(--accent);
+}
+
+@media (max-width: 1100px) {
+  .results-lineage-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .results-lineage-arrow {
+    min-height: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .results-lineage-section {
+    padding-top: 36px;
+    padding-bottom: 52px;
+  }
+
+  .results-lineage {
+    padding: 36px 0;
+  }
+
+  .results-lineage-node {
+    padding: 16px;
+  }
+}
 
 .results-run-context dd {
   margin: 0;

@@ -3,6 +3,7 @@ import { Container } from "@/components/container";
 import { EvaluationResultList } from "@/components/evaluation/result-list";
 import { EvaluationRunSummary } from "@/components/evaluation/run-summary";
 import { getLatestEvaluationRun } from "@/lib/evaluation/latest-run";
+import { EvaluationDecisionLineage } from "@/components/evaluation/decision-lineage";
 
 export const metadata: Metadata = {
   title: "Evaluation Results | AI Test Lab",
@@ -19,6 +20,11 @@ export default function ResultsPage() {
       <section className="results-hero">
         <Container>
           <EvaluationRunSummary run={run} />
+        </Container>
+      </section>
+      <section className="section results-lineage-section">
+        <Container>
+          <EvaluationDecisionLineage run={run} />
         </Container>
       </section>
 
