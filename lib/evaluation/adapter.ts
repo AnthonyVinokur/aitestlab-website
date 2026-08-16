@@ -1,5 +1,6 @@
 import type {
   EvaluationCase,
+  EvaluationDecision,
   EvaluationEngineResult,
   EvaluationMetric,
   EvaluationModelSummary,
@@ -35,7 +36,8 @@ function deriveStatusCounts(results: RawEvaluationResult[]) {
       const status = stringOr(result.status, "").toUpperCase();
       if (status === "PASS") counts.passed += 1;
       else if (status === "XFAIL") counts.expectedFailures += 1;
-      else if (status === "FAIL" || status === "XPASS") counts.unexpectedFailures += 1;
+      else if (status === "FAIL" || status === "XPASS")
+        counts.unexpectedFailures += 1;
       else if (status === "ERROR") counts.errors += 1;
       return counts;
     },
@@ -43,7 +45,9 @@ function deriveStatusCounts(results: RawEvaluationResult[]) {
   );
 }
 
-function adaptMetric(metric: NonNullable<RawEvaluationResult["evaluation_results"]>[number]): EvaluationMetric {
+function adaptMetric(
+  metric: NonNullable<RawEvaluationResult["evaluation_results"]>[number],
+): EvaluationMetric {
   return {
     name: stringOr(metric.metric_name, "metric"),
     engine: stringOr(metric.engine, "unknown"),
@@ -92,7 +96,9 @@ function adaptResult(result: RawEvaluationResult): EvaluationCase {
     generationLatencySeconds: numberOrNull(result.generation_latency_seconds),
     modelLoadSeconds: numberOrNull(result.model_load_seconds),
     promptTokensPerSecond: numberOrNull(result.prompt_tokens_per_second),
-    generationTokensPerSecond: numberOrNull(result.generation_tokens_per_second),
+    generationTokensPerSecond: numberOrNull(
+      result.generation_tokens_per_second,
+    ),
     metrics: Array.isArray(result.evaluation_results)
       ? result.evaluation_results.map(adaptMetric)
       : [],
@@ -114,11 +120,33 @@ function adaptModelSummary(
     errors: numberOrZero(item.errors),
     total: numberOrZero(item.total),
     passRatePercent: numberOrZero(item.pass_rate_percent),
-    averageResponseTimeSeconds: numberOrNull(item.average_response_time_seconds),
-    averageGenerationLatencySeconds: numberOrNull(item.average_generation_latency_seconds),
-    averageGenerationTokensPerSecond: numberOrNull(item.average_generation_tokens_per_second),
+    averageResponseTimeSeconds: numberOrNull(
+      item.average_response_time_seconds,
+    ),
+    averageGenerationLatencySeconds: numberOrNull(
+      item.average_generation_latency_seconds,
+    ),
+    averageGenerationTokensPerSecond: numberOrNull(
+      item.average_generation_tokens_per_second,
+    ),
     averageOutputTokens: numberOrNull(item.average_output_tokens),
     totalEstimatedCostUsd: numberOrNull(item.total_estimated_cost_usd),
+  };
+}
+
+function deriveDecision(
+  unexpectedFailures: number,
+  errors: number,
+): EvaluationDecision {
+  const requiresAttention = unexpectedFailures > 0 || errors > 0;
+
+  return {
+    status: requiresAttention ? "ATTENTION_REQUIRED" : "CLEAR",
+    unexpectedFailures,
+    errors,
+    explanation: requiresAttention
+      ? "Unexpected evaluation behavior requires investigation before this run can be treated as clear."
+      : "No unexpected failures or evaluation errors were recorded.",
   };
 }
 
@@ -151,6 +179,7 @@ export function adaptEvaluationReport(raw: RawEvaluationReport): EvaluationRun {
     schemaVersion: stringOr(raw.schema_version, "legacy"),
     reportType: stringOr(raw.report_type, "evaluation_run"),
     runId: stringOr(raw.run_id, fallbackRunId),
+    decision: deriveDecision(unexpectedFailures, errors),
     generatedAt,
     models: Array.isArray(raw.models)
       ? raw.models.filter((model): model is string => typeof model === "string")
@@ -164,12 +193,15 @@ export function adaptEvaluationReport(raw: RawEvaluationReport): EvaluationRun {
     totalEstimatedCostUsd: numberOrNull(summary.total_estimated_cost_usd),
     highestScoringModel:
       typeof raw.highlights?.highest_scoring_model === "string"
-        ? raw.highlights.highest_scoring_model : null,
+        ? raw.highlights.highest_scoring_model
+        : null,
     fastestModel:
       typeof raw.highlights?.fastest_model === "string"
-        ? raw.highlights.fastest_model : null,
+        ? raw.highlights.fastest_model
+        : null,
     modelComparison: Array.isArray(raw.model_comparison)
-      ? raw.model_comparison.map(adaptModelSummary) : [],
+      ? raw.model_comparison.map(adaptModelSummary)
+      : [],
     results: rawResults.map(adaptResult),
   };
 }

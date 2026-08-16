@@ -97,3 +97,30 @@ test("mobile navigation exposes the primary routes", async ({ page }) => {
   await page.getByRole("navigation", { name: "Mobile navigation" }).getByRole("link", { name: "Atlas" }).click();
   await expect(page).toHaveURL(/\/atlas$/);
 });
+
+test("results page exposes the normalized run decision", async ({ page }) => {
+  await page.goto("/results");
+
+  await expect(
+    page.getByText("ATTENTION REQUIRED", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    page.getByText(
+      "Decision: Unexpected evaluation behavior requires investigation before this run can be treated as clear.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+
+  await expect(
+    page.getByText("1 unexpected failure requires investigation.", {
+      exact: true,
+    }),
+  ).toBeVisible();
+
+  await expect(
+    page.getByText("0 evaluation errors were recorded.", {
+      exact: true,
+    }),
+  ).toBeVisible();
+});

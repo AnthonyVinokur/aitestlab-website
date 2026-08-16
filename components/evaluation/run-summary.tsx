@@ -9,7 +9,7 @@ import {
 
 export function EvaluationRunSummary({ run }: { run: EvaluationRun }) {
   const model = run.modelComparison[0];
-  const requiresAttention = run.unexpectedFailures > 0 || run.errors > 0;
+  const requiresAttention = run.decision.status === "ATTENTION_REQUIRED";
 
   return (
     <section className="results-overview" aria-label="Evaluation run summary">
@@ -47,9 +47,9 @@ export function EvaluationRunSummary({ run }: { run: EvaluationRun }) {
               : "results-run-signal-clear"
           }`}
         >
-          {requiresAttention
+          {run.decision.status === "ATTENTION_REQUIRED"
             ? "ATTENTION REQUIRED"
-            : "NO UNEXPECTED FAILURES"}
+            : "CLEAR"}
         </span>
       </div>
 
@@ -80,6 +80,9 @@ export function EvaluationRunSummary({ run }: { run: EvaluationRun }) {
         aria-label="Run outcome interpretation"
       >
         <p>
+          <strong>Decision:</strong> {run.decision.explanation}
+        </p>
+        <p>
           <strong>{run.unexpectedFailures}</strong>{" "}
           {run.unexpectedFailures === 1
             ? "unexpected failure requires"
@@ -97,9 +100,7 @@ export function EvaluationRunSummary({ run }: { run: EvaluationRun }) {
 
         <p>
           <strong>{run.errors}</strong>{" "}
-          {run.errors === 1
-            ? "evaluation error was"
-            : "evaluation errors were"}{" "}
+          {run.errors === 1 ? "evaluation error was" : "evaluation errors were"}{" "}
           recorded.
         </p>
       </div>
@@ -122,9 +123,7 @@ export function EvaluationRunSummary({ run }: { run: EvaluationRun }) {
         <span>
           <small>Generation speed</small>
           <strong>
-            {formatThroughput(
-              model?.averageGenerationTokensPerSecond ?? null,
-            )}
+            {formatThroughput(model?.averageGenerationTokensPerSecond ?? null)}
           </strong>
         </span>
 

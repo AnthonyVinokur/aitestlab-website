@@ -1,5 +1,5 @@
 export type EvaluationStatus =
-  | "PASS" | "FAIL" | "XFAIL" | "XPASS" | "ERROR" | "SKIP" | string;
+  "PASS" | "FAIL" | "XFAIL" | "XPASS" | "ERROR" | "SKIP" | string;
 
 export interface RawEvaluationMetric {
   metric_name?: string;
@@ -171,4 +171,13 @@ export interface EvaluationRun {
   fastestModel: string | null;
   modelComparison: EvaluationModelSummary[];
   results: EvaluationCase[];
+  decision: EvaluationDecision;
+}
+export type EvaluationDecisionStatus = "CLEAR" | "ATTENTION_REQUIRED";
+
+export interface EvaluationDecision {
+  status: EvaluationDecisionStatus;
+  unexpectedFailures: number;
+  errors: number;
+  explanation: string;
 }
