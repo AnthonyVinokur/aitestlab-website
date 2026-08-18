@@ -159,6 +159,12 @@ export interface EvaluationRunContext {
   profileName: string | null;
   profileVersion: string | null;
 }
+export interface EvaluationReproducibilityContext {
+  engines: string[];
+  evaluatorModels: string[];
+  runtimeOptionsPresent: boolean;
+  engineErrors: string[];
+}
 
 export interface EvaluationRun {
   schemaVersion: string;
@@ -179,6 +185,7 @@ export interface EvaluationRun {
   results: EvaluationCase[];
   decision: EvaluationDecision;
   context: EvaluationRunContext;
+  reproducibility: EvaluationReproducibilityContext;
 }
 export type EvaluationDecisionStatus = "CLEAR" | "ATTENTION_REQUIRED";
 

@@ -55,6 +55,44 @@ export function EvaluationRunSummary({ run }: { run: EvaluationRun }) {
           </div>
 
           <div>
+            <dt>Evaluation engines</dt>
+            <dd>
+              {run.reproducibility.engines.length
+                ? run.reproducibility.engines.join(", ")
+                : "Not reported"}
+            </dd>
+          </div>
+
+          <div>
+            <dt>Evaluator model</dt>
+            <dd>
+              {run.reproducibility.evaluatorModels.length
+                ? run.reproducibility.evaluatorModels.join(", ")
+                : "Not reported"}
+            </dd>
+          </div>
+
+          <div>
+            <dt>Runtime configuration</dt>
+            <dd>
+              {run.reproducibility.runtimeOptionsPresent
+                ? "Recorded"
+                : "Not reported"}
+            </dd>
+          </div>
+
+          <div>
+            <dt>Engine execution</dt>
+            <dd>
+              {run.reproducibility.engineErrors.length
+                ? `${run.reproducibility.engineErrors.length} issue${
+                    run.reproducibility.engineErrors.length === 1 ? "" : "s"
+                  } recorded`
+                : "No engine failures reported"}
+            </dd>
+          </div>
+
+          <div>
             <dt>Report contract</dt>
             <dd>
               schema {run.schemaVersion} · {run.reportType}
