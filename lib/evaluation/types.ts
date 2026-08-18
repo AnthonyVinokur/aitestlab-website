@@ -189,6 +189,52 @@ export interface EvaluationRun {
 }
 export type EvaluationDecisionStatus = "CLEAR" | "ATTENTION_REQUIRED";
 
+export type EvaluationComparisonChange =
+  "UNCHANGED" | "IMPROVED" | "REGRESSED" | "ADDED" | "REMOVED";
+
+export interface EvaluationCaseComparison {
+  id: string;
+  name: string;
+  baselineStatus: EvaluationStatus | null;
+  currentStatus: EvaluationStatus | null;
+  change: EvaluationComparisonChange;
+}
+
+export interface EvaluationComparisonSummary {
+  unchanged: number;
+  improved: number;
+  regressed: number;
+  added: number;
+  removed: number;
+}
+
+export interface EvaluationRunComparison {
+  baselineRunId: string;
+  currentRunId: string;
+
+  baselineDecision: EvaluationDecisionStatus;
+  currentDecision: EvaluationDecisionStatus;
+
+  baselinePassed: number;
+  currentPassed: number;
+  passedDelta: number;
+
+  baselineUnexpectedFailures: number;
+  currentUnexpectedFailures: number;
+  unexpectedFailuresDelta: number;
+
+  baselineErrors: number;
+  currentErrors: number;
+  errorsDelta: number;
+
+  baselinePassRatePercent: number;
+  currentPassRatePercent: number;
+  passRateDelta: number;
+
+  cases: EvaluationCaseComparison[];
+  summary: EvaluationComparisonSummary;
+}
+
 export interface EvaluationDecision {
   status: EvaluationDecisionStatus;
   unexpectedFailures: number;

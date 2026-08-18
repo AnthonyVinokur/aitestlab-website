@@ -1,6 +1,9 @@
 import type {
   EvaluationCase,
   EvaluationDecision,
+  EvaluationCaseComparison,
+  EvaluationComparisonChange,
+  EvaluationRunComparison,
   EvaluationEngineResult,
   EvaluationMetric,
   EvaluationModelSummary,
@@ -303,5 +306,155 @@ export function adaptEvaluationReport(raw: RawEvaluationReport): EvaluationRun {
       ? raw.model_comparison.map(adaptModelSummary)
       : [],
     results: rawResults.map(adaptResult),
+  };
+}
+
+function statusOutcome(
+  status: string | null,
+): "ACCEPTABLE" | "UNACCEPTABLE" | "NEUTRAL" {
+  if (!status) {
+    return "NEUTRAL";
+  }
+
+  const normalized = status.toUpperCase();
+
+  if (normalized === "PASS" || normalized === "XFAIL") {
+    return "ACCEPTABLE";
+  }
+
+  if (
+    normalized === "FAIL" ||
+    normalized === "XPASS" ||
+    normalized === "ERROR"
+  ) {
+    return "UNACCEPTABLE";
+  }
+
+  return "NEUTRAL";
+}
+
+function classifyCaseChange(
+  baseline: EvaluationCase | undefined,
+  current: EvaluationCase | undefined,
+): EvaluationComparisonChange {
+  if (!baseline) {
+    return "ADDED";
+  }
+
+  if (!current) {
+    return "REMOVED";
+  }
+
+  const baselineOutcome = statusOutcome(baseline.status);
+  const currentOutcome = statusOutcome(current.status);
+
+  if (baselineOutcome === "UNACCEPTABLE" && currentOutcome === "ACCEPTABLE") {
+    return "IMPROVED";
+  }
+
+  if (baselineOutcome === "ACCEPTABLE" && currentOutcome === "UNACCEPTABLE") {
+    return "REGRESSED";
+  }
+
+  return "UNCHANGED";
+}
+
+function compareCases(
+  baseline: EvaluationRun,
+  current: EvaluationRun,
+): EvaluationCaseComparison[] {
+  const baselineById = new Map(
+    baseline.results.map((result) => [result.id, result]),
+  );
+
+  const currentById = new Map(
+    current.results.map((result) => [result.id, result]),
+  );
+
+  const orderedIds = [
+    ...baseline.results.map((result) => result.id),
+    ...current.results
+      .map((result) => result.id)
+      .filter((id) => !baselineById.has(id)),
+  ];
+
+  return orderedIds.map((id) => {
+    const baselineCase = baselineById.get(id);
+    const currentCase = currentById.get(id);
+
+    return {
+      id,
+      name: currentCase?.name ?? baselineCase?.name ?? id,
+      baselineStatus: baselineCase?.status ?? null,
+      currentStatus: currentCase?.status ?? null,
+      change: classifyCaseChange(baselineCase, currentCase),
+    };
+  });
+}
+
+export function compareEvaluationRuns(
+  baseline: EvaluationRun,
+  current: EvaluationRun,
+): EvaluationRunComparison {
+  const cases = compareCases(baseline, current);
+
+  const summary = cases.reduce(
+    (counts, item) => {
+      switch (item.change) {
+        case "IMPROVED":
+          counts.improved += 1;
+          break;
+        case "REGRESSED":
+          counts.regressed += 1;
+          break;
+        case "ADDED":
+          counts.added += 1;
+          break;
+        case "REMOVED":
+          counts.removed += 1;
+          break;
+        default:
+          counts.unchanged += 1;
+      }
+
+      return counts;
+    },
+    {
+      unchanged: 0,
+      improved: 0,
+      regressed: 0,
+      added: 0,
+      removed: 0,
+    },
+  );
+
+  return {
+    baselineRunId: baseline.runId,
+    currentRunId: current.runId,
+
+    baselineDecision: baseline.decision.status,
+    currentDecision: current.decision.status,
+
+    baselinePassed: baseline.passed,
+    currentPassed: current.passed,
+    passedDelta: current.passed - baseline.passed,
+
+    baselineUnexpectedFailures: baseline.unexpectedFailures,
+    currentUnexpectedFailures: current.unexpectedFailures,
+    unexpectedFailuresDelta:
+      current.unexpectedFailures - baseline.unexpectedFailures,
+
+    baselineErrors: baseline.errors,
+    currentErrors: current.errors,
+    errorsDelta: current.errors - baseline.errors,
+
+    baselinePassRatePercent: baseline.passRatePercent,
+    currentPassRatePercent: current.passRatePercent,
+    passRateDelta:
+      Math.round((current.passRatePercent - baseline.passRatePercent) * 100) /
+      100,
+
+    cases,
+    summary,
   };
 }
