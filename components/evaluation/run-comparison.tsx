@@ -1,6 +1,7 @@
 import type {
   EvaluationComparisonChange,
   EvaluationRunComparison,
+  EvaluationComparisonEvidence,
 } from "@/lib/evaluation/types";
 
 interface EvaluationRunComparisonProps {
@@ -28,6 +29,48 @@ function changeLabel(change: EvaluationComparisonChange) {
     default:
       return "Unchanged";
   }
+}
+
+function ComparisonEvidence({
+  label,
+  evidence,
+}: {
+  label: string;
+  evidence: EvaluationComparisonEvidence | null;
+}) {
+  return (
+    <section className="run-comparison-evidence-panel">
+      <span className="run-comparison-evidence-label">{label}</span>
+
+      {evidence ? (
+        <>
+          <div>
+            <small>Actual response</small>
+            <pre>{evidence.actualResponse || "—"}</pre>
+          </div>
+
+          <div>
+            <small>Expected</small>
+            <code>{evidence.expected || "—"}</code>
+          </div>
+
+          <div>
+            <small>Assertion</small>
+            <strong>{evidence.assertionType || "—"}</strong>
+          </div>
+
+          <div>
+            <small>Evaluation reason</small>
+            <p>{evidence.reason || "—"}</p>
+          </div>
+        </>
+      ) : (
+        <p className="run-comparison-evidence-missing">
+          Not present in this run.
+        </p>
+      )}
+    </section>
+  );
 }
 
 export function EvaluationRunComparison({
@@ -177,25 +220,66 @@ export function EvaluationRunComparison({
           <span>Change</span>
         </div>
 
-        {comparison.cases.map((item) => (
-          <div
-            className="run-comparison-case"
-            data-change={item.change}
-            key={item.id}
-          >
-            <div>
-              <strong>{item.name}</strong>
-              <code>{item.id}</code>
-            </div>
+        {comparison.cases.map((item) => {
+          const changed = item.change !== "UNCHANGED";
 
-            <span>{item.baselineStatus ?? "—"}</span>
-            <span>{item.currentStatus ?? "—"}</span>
+          if (!changed) {
+            return (
+              <div
+                className="run-comparison-case"
+                data-change={item.change}
+                key={item.id}
+              >
+                <div>
+                  <strong>{item.name}</strong>
+                  <code>{item.id}</code>
+                </div>
 
-            <strong className="run-comparison-change">
-              {changeLabel(item.change)}
-            </strong>
-          </div>
-        ))}
+                <span>{item.baselineStatus ?? "—"}</span>
+                <span>{item.currentStatus ?? "—"}</span>
+
+                <strong className="run-comparison-change">
+                  {changeLabel(item.change)}
+                </strong>
+              </div>
+            );
+          }
+
+          return (
+            <details
+              className="run-comparison-diagnostic"
+              data-change={item.change}
+              key={item.id}
+              open={item.change === "REGRESSED"}
+            >
+              <summary className="run-comparison-case">
+                <div>
+                  <strong>{item.name}</strong>
+                  <code>{item.id}</code>
+                </div>
+
+                <span>{item.baselineStatus ?? "—"}</span>
+                <span>{item.currentStatus ?? "—"}</span>
+
+                <strong className="run-comparison-change">
+                  {changeLabel(item.change)}
+                </strong>
+              </summary>
+
+              <div className="run-comparison-evidence">
+                <ComparisonEvidence
+                  label="Baseline evidence"
+                  evidence={item.baselineEvidence}
+                />
+
+                <ComparisonEvidence
+                  label="Current evidence"
+                  evidence={item.currentEvidence}
+                />
+              </div>
+            </details>
+          );
+        })}
       </div>
     </section>
   );
