@@ -3402,3 +3402,232 @@ p {
     padding-bottom: 84px;
   }
 }
+
+/* W2.13 — Evaluation run comparison */
+
+.results-comparison-section {
+  border-top: 1px solid var(--line);
+}
+
+.run-comparison {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.run-comparison-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.55fr);
+  align-items: end;
+  gap: var(--space-12);
+}
+
+.run-comparison-heading h2,
+.run-comparison-heading p {
+  margin-bottom: 0;
+}
+
+.run-comparison-heading > p {
+  color: var(--muted);
+}
+
+.run-comparison-runs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.run-comparison-run {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.run-comparison-run > strong {
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.run-comparison-label {
+  width: fit-content;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.run-comparison-run dl {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.run-comparison-run dl > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.run-comparison-run dl > div:last-child {
+  border-bottom: 0;
+}
+
+.run-comparison-run dt {
+  color: var(--muted);
+}
+
+.run-comparison-run dd {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-weight: 800;
+}
+
+.run-comparison-delta {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.run-comparison-arrow {
+  color: var(--accent);
+  font-size: 1.5rem;
+}
+
+.run-comparison-summary {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.run-comparison-summary > div {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border-right: 1px solid var(--line);
+}
+
+.run-comparison-summary > div:last-child {
+  border-right: 0;
+}
+
+.run-comparison-summary span {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.run-comparison-summary strong {
+  font-size: var(--text-xl);
+}
+
+.run-comparison-cases {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.run-comparison-case {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.6fr) 0.5fr 0.5fr 0.65fr;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--line);
+}
+
+.run-comparison-case:last-child {
+  border-bottom: 0;
+}
+
+.run-comparison-case > div:first-child {
+  display: grid;
+  gap: 2px;
+}
+
+.run-comparison-case code {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.run-comparison-case-header {
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.025);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.run-comparison-change {
+  font-size: var(--text-sm);
+}
+
+.run-comparison-case[data-change="REGRESSED"] .run-comparison-change {
+  color: var(--danger);
+}
+
+.run-comparison-case[data-change="IMPROVED"] .run-comparison-change {
+  color: var(--accent);
+}
+
+.run-comparison-case[data-change="ADDED"] .run-comparison-change,
+.run-comparison-case[data-change="REMOVED"] .run-comparison-change {
+  color: var(--color-warning);
+}
+
+.run-comparison-case[data-change="REGRESSED"] {
+  background: rgba(255, 141, 141, 0.035);
+}
+
+@media (max-width: 820px) {
+  .run-comparison-heading {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+
+  .run-comparison-runs {
+    grid-template-columns: 1fr;
+  }
+
+  .run-comparison-arrow {
+    transform: rotate(90deg);
+    justify-self: center;
+  }
+
+  .run-comparison-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .run-comparison-summary > div {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .run-comparison-case {
+    grid-template-columns: minmax(160px, 1.4fr) repeat(3, 0.6fr);
+    min-width: 680px;
+  }
+
+  .run-comparison-cases {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .run-comparison-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .run-comparison-summary > div {
+    border-right: 0;
+  }
+}

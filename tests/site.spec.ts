@@ -244,3 +244,46 @@ test("results page traces unexpected evidence to the run decision", async ({
     lineage.getByText("ATTENTION REQUIRED", { exact: true }),
   ).toBeVisible();
 });
+
+test("results page compares the baseline and current evaluation runs", async ({
+  page,
+}) => {
+  await page.goto("/results");
+
+  const comparison = page.getByRole("region", {
+    name: "Compare evaluation runs.",
+  });
+
+  await expect(comparison).toBeVisible();
+
+  await expect(
+    comparison.getByText("run-20260807122918", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    comparison.getByText("run-20260808122918", { exact: true }),
+  ).toBeVisible();
+
+  const baselineRun = comparison.locator(".run-comparison-run").filter({
+    hasText: "Baseline",
+  });
+
+  const currentRun = comparison.locator(".run-comparison-run").filter({
+    hasText: "Current",
+  });
+
+  await expect(baselineRun.getByText("85.71%", { exact: true })).toBeVisible();
+
+  await expect(currentRun.getByText("71.43%", { exact: false })).toBeVisible();
+
+  const regression = comparison.locator('[data-change="REGRESSED"]').filter({
+    hasText: "unexpected-failure-demo",
+  });
+
+  await expect(regression).toBeVisible();
+  await expect(regression.getByText("PASS", { exact: true })).toBeVisible();
+  await expect(regression.getByText("FAIL", { exact: true })).toBeVisible();
+  await expect(
+    regression.getByText("Regressed", { exact: true }),
+  ).toBeVisible();
+});

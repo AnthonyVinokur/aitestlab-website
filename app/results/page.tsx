@@ -4,6 +4,8 @@ import { EvaluationResultList } from "@/components/evaluation/result-list";
 import { EvaluationRunSummary } from "@/components/evaluation/run-summary";
 import { getLatestEvaluationRun } from "@/lib/evaluation/latest-run";
 import { EvaluationDecisionLineage } from "@/components/evaluation/decision-lineage";
+import { EvaluationRunComparison } from "@/components/evaluation/run-comparison";
+import { getEvaluationRunComparison } from "@/lib/evaluation/run-comparison";
 
 export const metadata: Metadata = {
   title: "Evaluation Results | AI Test Lab",
@@ -14,6 +16,7 @@ export const metadata: Metadata = {
 
 export default function ResultsPage() {
   const run = getLatestEvaluationRun();
+  const comparison = getEvaluationRunComparison();
 
   return (
     <>
@@ -22,9 +25,16 @@ export default function ResultsPage() {
           <EvaluationRunSummary run={run} />
         </Container>
       </section>
+
       <section className="section results-lineage-section">
         <Container>
           <EvaluationDecisionLineage run={run} />
+        </Container>
+      </section>
+
+      <section className="section results-comparison-section">
+        <Container>
+          <EvaluationRunComparison comparison={comparison} />
         </Container>
       </section>
 
