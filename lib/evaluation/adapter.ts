@@ -12,6 +12,7 @@ import type {
   RawEvaluationReport,
   RawEvaluationResult,
   EvaluationReproducibilityContext,
+  EvaluationComparisonEvidence,
 } from "./types";
 
 const numberOrNull = (value: unknown): number | null =>
@@ -358,6 +359,20 @@ function classifyCaseChange(
 
   return "UNCHANGED";
 }
+function comparisonEvidence(
+  evaluationCase: EvaluationCase | undefined,
+): EvaluationComparisonEvidence | null {
+  if (!evaluationCase) {
+    return null;
+  }
+
+  return {
+    actualResponse: evaluationCase.actualResponse,
+    expected: evaluationCase.expected,
+    assertionType: evaluationCase.assertionType,
+    reason: evaluationCase.reason,
+  };
+}
 
 function compareCases(
   baseline: EvaluationRun,
@@ -388,6 +403,8 @@ function compareCases(
       baselineStatus: baselineCase?.status ?? null,
       currentStatus: currentCase?.status ?? null,
       change: classifyCaseChange(baselineCase, currentCase),
+      baselineEvidence: comparisonEvidence(baselineCase),
+      currentEvidence: comparisonEvidence(currentCase),
     };
   });
 }

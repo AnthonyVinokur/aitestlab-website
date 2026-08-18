@@ -192,12 +192,21 @@ export type EvaluationDecisionStatus = "CLEAR" | "ATTENTION_REQUIRED";
 export type EvaluationComparisonChange =
   "UNCHANGED" | "IMPROVED" | "REGRESSED" | "ADDED" | "REMOVED";
 
+export interface EvaluationComparisonEvidence {
+  actualResponse: string;
+  expected: string;
+  assertionType: string;
+  reason: string;
+}
+
 export interface EvaluationCaseComparison {
   id: string;
   name: string;
   baselineStatus: EvaluationStatus | null;
   currentStatus: EvaluationStatus | null;
   change: EvaluationComparisonChange;
+  baselineEvidence: EvaluationComparisonEvidence | null;
+  currentEvidence: EvaluationComparisonEvidence | null;
 }
 
 export interface EvaluationComparisonSummary {

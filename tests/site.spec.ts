@@ -64,7 +64,7 @@ test("results page exposes evidence for an unexpected failure", async ({
 }) => {
   await page.goto("/results");
 
-  const failure = page.locator("details").filter({
+  const failure = page.locator(".results-list details").filter({
     hasText: "unexpected-failure-demo",
   });
 
@@ -285,5 +285,32 @@ test("results page compares the baseline and current evaluation runs", async ({
   await expect(regression.getByText("FAIL", { exact: true })).toBeVisible();
   await expect(
     regression.getByText("Regressed", { exact: true }),
+  ).toBeVisible();
+
+  await expect(regression).toHaveAttribute("open", "");
+
+  const baselineEvidence = regression
+    .locator(".run-comparison-evidence-panel")
+    .filter({ hasText: "Baseline evidence" });
+
+  const currentEvidence = regression
+    .locator(".run-comparison-evidence-panel")
+    .filter({ hasText: "Current evidence" });
+
+  await expect(baselineEvidence).toBeVisible();
+  await expect(currentEvidence).toBeVisible();
+
+  await expect(
+    baselineEvidence.getByText("starts_with", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    currentEvidence.getByText("starts_with", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    currentEvidence.getByText("This text should never match", {
+      exact: true,
+    }),
   ).toBeVisible();
 });
