@@ -9,12 +9,15 @@ const primaryRoutes = [
   ["Roadmap", "/roadmap"],
 ] as const;
 
-test("home page presents the product and a working primary CTA", async ({ page }) => {
+test("home page presents the product and a working primary CTA", async ({
+  page,
+}) => {
   await page.goto("/");
   await expect(page).toHaveTitle(/AI Test Lab/);
 
-  await expect(page.getByRole("heading", { level: 1 }))
-  .toContainText("Test AI systems with evidence, not intuition.");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "Test AI systems with evidence, not intuition.",
+  );
 
   await page.getByRole("link", { name: "Explore AI Test Lab" }).click();
 
@@ -56,7 +59,9 @@ test("results page renders real AI Test Lab report data", async ({ page }) => {
   await expect(page.locator('[data-status="XFAIL"]').first()).toBeVisible();
 });
 
-test("results page exposes evidence for an unexpected failure", async ({ page }) => {
+test("results page exposes evidence for an unexpected failure", async ({
+  page,
+}) => {
   await page.goto("/results");
 
   const failure = page.locator("details").filter({
@@ -73,13 +78,17 @@ test("results page exposes evidence for an unexpected failure", async ({ page })
     failure.getByText("This text should never match", { exact: true }),
   ).toBeVisible();
   await expect(
-    failure.locator(".result-narrative").getByText(
-      "Response does not start with expected text: 'This text should never match'",
-      { exact: true },
-    ),
+    failure
+      .locator(".result-narrative")
+      .getByText(
+        "Response does not start with expected text: 'This text should never match'",
+        { exact: true },
+      ),
   ).toBeVisible();
   await expect(
-    failure.locator(".result-evidence").getByText("starts_with", { exact: true }),
+    failure
+      .locator(".result-evidence")
+      .getByText("starts_with", { exact: true }),
   ).toBeVisible();
 
   const metrics = failure.locator(".results-metrics");
@@ -87,10 +96,14 @@ test("results page exposes evidence for an unexpected failure", async ({ page })
   await expect(metrics.getByText("1.000", { exact: true })).toBeVisible();
 });
 
-test("unknown routes render the custom not-found experience", async ({ page }) => {
+test("unknown routes render the custom not-found experience", async ({
+  page,
+}) => {
   const response = await page.goto("/definitely-not-a-real-route");
   expect(response?.status()).toBe(404);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("did not pass validation");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "did not pass validation",
+  );
 });
 
 test("pages do not emit uncaught runtime errors", async ({ page }) => {
@@ -104,13 +117,17 @@ test("pages do not emit uncaught runtime errors", async ({ page }) => {
   expect(errors).toEqual([]);
 });
 
-
 test("mobile navigation exposes the primary routes", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   await page.locator(".mobile-menu summary").click();
-  await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toBeVisible();
-  await page.getByRole("navigation", { name: "Mobile navigation" }).getByRole("link", { name: "Atlas" }).click();
+  await expect(
+    page.getByRole("navigation", { name: "Mobile navigation" }),
+  ).toBeVisible();
+  await page
+    .getByRole("navigation", { name: "Mobile navigation" })
+    .getByRole("link", { name: "Atlas" })
+    .click();
   await expect(page).toHaveURL(/\/atlas$/);
 });
 
@@ -164,16 +181,41 @@ test("results page exposes evaluation run traceability", async ({ page }) => {
     context.getByText("Evaluation profile", { exact: true }),
   ).toBeVisible();
 
+  const profileRow = context.locator("div").filter({
+    hasText: "Evaluation profile",
+  });
+
+  await expect(profileRow.locator("dd")).toHaveText("Not reported");
+
   await expect(
-    context.getByText("Not reported", { exact: true }),
+    context.getByText("Evaluation engines", { exact: true }),
   ).toBeVisible();
 
+  await expect(context.getByText("builtin", { exact: true })).toBeVisible();
+
+  await expect(
+    context.getByText("Evaluator model", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    context.getByText("Runtime configuration", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    context.getByText("Engine execution", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    context.getByText("No engine failures reported", { exact: true }),
+  ).toBeVisible();
   await expect(
     context.getByText("Report contract", { exact: true }),
   ).toBeVisible();
 });
 
-test("results page traces unexpected evidence to the run decision", async ({ page }) => {
+test("results page traces unexpected evidence to the run decision", async ({
+  page,
+}) => {
   await page.goto("/results");
 
   const lineage = page.getByRole("region", {

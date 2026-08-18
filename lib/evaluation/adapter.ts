@@ -8,6 +8,7 @@ import type {
   EvaluationRunContext,
   RawEvaluationReport,
   RawEvaluationResult,
+  EvaluationReproducibilityContext,
 } from "./types";
 
 const numberOrNull = (value: unknown): number | null =>
@@ -177,6 +178,60 @@ function deriveRunContext(raw: RawEvaluationReport): EvaluationRunContext {
     ),
   };
 }
+function deriveReproducibilityContext(
+  raw: RawEvaluationReport,
+): EvaluationReproducibilityContext {
+  const rawResults = Array.isArray(raw.results) ? raw.results : [];
+
+  const metrics = rawResults.flatMap((result) =>
+    Array.isArray(result.evaluation_results) ? result.evaluation_results : [],
+  );
+
+  const engineResults = rawResults.flatMap((result) =>
+    Array.isArray(result.engine_results) ? result.engine_results : [],
+  );
+
+  const engines = [
+    ...new Set(
+      [
+        ...metrics.map((metric) => nullableString(metric.engine)),
+        ...engineResults.map((result) => nullableString(result.engine)),
+      ].filter((engine): engine is string => engine !== null),
+    ),
+  ];
+
+  const evaluatorModels = [
+    ...new Set(
+      metrics
+        .map((metric) => nullableString(metric.evaluator_model))
+        .filter((model): model is string => model !== null),
+    ),
+  ];
+
+  const runtimeOptionsPresent = metrics.some(
+    (metric) =>
+      metric.runtime_options != null &&
+      typeof metric.runtime_options === "object" &&
+      Object.keys(metric.runtime_options).length > 0,
+  );
+
+  const engineErrors = engineResults
+    .filter((result) => result.succeeded === false)
+    .map((result) => {
+      const engine = stringOr(result.engine, "unknown");
+      const error = nullableString(result.error);
+
+      return error ? `${engine}: ${error}` : `${engine}: evaluation failed`;
+    });
+
+  return {
+    engines,
+    evaluatorModels,
+    runtimeOptionsPresent,
+    engineErrors,
+  };
+}
+
 function deriveDecision(
   unexpectedFailures: number,
   errors: number,
@@ -233,6 +288,7 @@ export function adaptEvaluationReport(raw: RawEvaluationReport): EvaluationRun {
     errors,
     total,
     context: deriveRunContext(raw),
+    reproducibility: deriveReproducibilityContext(raw),
     passRatePercent,
     totalEstimatedCostUsd: numberOrNull(summary.total_estimated_cost_usd),
     highestScoringModel:
