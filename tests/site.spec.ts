@@ -96,6 +96,37 @@ test("results page exposes evidence for an unexpected failure", async ({
   await expect(metrics.getByText("1.000", { exact: true })).toBeVisible();
 });
 
+test("results page prioritizes a regression by impact", async ({ page }) => {
+  await page.goto("/results");
+
+  const comparison = page.getByRole("region", {
+    name: "Compare evaluation runs.",
+  });
+
+  const regression = comparison.locator('[data-change="REGRESSED"]').filter({
+    hasText: "unexpected-failure-demo",
+  });
+
+  await expect(regression).toBeVisible();
+  await expect(regression).toHaveAttribute("open", "");
+
+  const impact = regression.getByRole("region", {
+    name: "Regression impact",
+  });
+
+  await expect(impact).toBeVisible();
+  await expect(impact).toHaveAttribute("data-impact", "HIGH");
+
+  await expect(impact.getByText("HIGH", { exact: true })).toBeVisible();
+
+  await expect(
+    impact.getByText(
+      "Previously acceptable evaluation outcome changed from PASS to FAIL and now requires investigation.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+});
+
 test("unknown routes render the custom not-found experience", async ({
   page,
 }) => {

@@ -3,6 +3,7 @@ import type {
   EvaluationRunComparison,
   EvaluationComparisonEvidence,
   EvaluationRegressionDiagnosis,
+  EvaluationRegressionImpact,
 } from "@/lib/evaluation/types";
 
 interface EvaluationRunComparisonProps {
@@ -58,6 +59,31 @@ function formatDelta(value: number, suffix = "") {
   }
 
   return `${value > 0 ? "+" : ""}${value}${suffix}`;
+}
+
+function RegressionImpact({
+  impact,
+}: {
+  impact: EvaluationRegressionImpact | null;
+}) {
+  if (!impact) {
+    return null;
+  }
+
+  return (
+    <section
+      className="run-comparison-impact"
+      aria-label="Regression impact"
+      data-impact={impact.level}
+    >
+      <span className="run-comparison-evidence-label">Regression impact</span>
+
+      <div className="run-comparison-impact-content">
+        <strong>{impact.level}</strong>
+        <p>{impact.reason}</p>
+      </div>
+    </section>
+  );
 }
 
 function changeLabel(change: EvaluationComparisonChange) {
@@ -309,6 +335,8 @@ export function EvaluationRunComparison({
                   {changeLabel(item.change)}
                 </strong>
               </summary>
+
+              <RegressionImpact impact={item.impact} />
 
               <RegressionDiagnosis diagnosis={item.diagnosis} />
 

@@ -14,6 +14,7 @@ import type {
   EvaluationReproducibilityContext,
   EvaluationRegressionDiagnosis,
   EvaluationComparisonEvidence,
+  EvaluationRegressionImpact,
 } from "./types";
 
 const numberOrNull = (value: unknown): number | null =>
@@ -409,6 +410,7 @@ function compareCases(
       baselineEvidence: comparisonEvidence(baselineCase),
       currentEvidence: comparisonEvidence(currentCase),
       diagnosis: regressionDiagnosis(change, baselineCase, currentCase),
+      impact: regressionImpact(change, baselineCase, currentCase),
     };
   });
 }
@@ -494,5 +496,22 @@ function regressionDiagnosis(
     assertionType: current.assertionType || null,
     expected: current.expected || null,
     reason: current.reason || null,
+  };
+}
+
+function regressionImpact(
+  change: EvaluationComparisonChange,
+  baseline: EvaluationCase | undefined,
+  current: EvaluationCase | undefined,
+): EvaluationRegressionImpact | null {
+  if (change !== "REGRESSED" || !baseline || !current) {
+    return null;
+  }
+
+  return {
+    level: "HIGH",
+    reason:
+      `Previously acceptable evaluation outcome changed from ` +
+      `${baseline.status} to ${current.status} and now requires investigation.`,
   };
 }
