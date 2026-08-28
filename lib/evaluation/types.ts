@@ -199,16 +199,6 @@ export interface EvaluationComparisonEvidence {
   reason: string;
 }
 
-export interface EvaluationCaseComparison {
-  id: string;
-  name: string;
-  baselineStatus: EvaluationStatus | null;
-  currentStatus: EvaluationStatus | null;
-  change: EvaluationComparisonChange;
-  baselineEvidence: EvaluationComparisonEvidence | null;
-  currentEvidence: EvaluationComparisonEvidence | null;
-}
-
 export interface EvaluationComparisonSummary {
   unchanged: number;
   improved: number;
@@ -249,4 +239,22 @@ export interface EvaluationDecision {
   unexpectedFailures: number;
   errors: number;
   explanation: string;
+}
+
+export interface EvaluationRegressionDiagnosis {
+  cause: string;
+  assertionType: string | null;
+  expected: string | null;
+  reason: string | null;
+}
+
+export interface EvaluationCaseComparison {
+  id: string;
+  name: string;
+  baselineStatus: EvaluationStatus | null;
+  currentStatus: EvaluationStatus | null;
+  change: EvaluationComparisonChange;
+  baselineEvidence: EvaluationComparisonEvidence | null;
+  currentEvidence: EvaluationComparisonEvidence | null;
+  diagnosis: EvaluationRegressionDiagnosis | null;
 }

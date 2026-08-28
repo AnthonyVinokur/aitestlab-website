@@ -12,6 +12,7 @@ import type {
   RawEvaluationReport,
   RawEvaluationResult,
   EvaluationReproducibilityContext,
+  EvaluationRegressionDiagnosis,
   EvaluationComparisonEvidence,
 } from "./types";
 
@@ -397,14 +398,17 @@ function compareCases(
     const baselineCase = baselineById.get(id);
     const currentCase = currentById.get(id);
 
+    const change = classifyCaseChange(baselineCase, currentCase);
+
     return {
       id,
       name: currentCase?.name ?? baselineCase?.name ?? id,
       baselineStatus: baselineCase?.status ?? null,
       currentStatus: currentCase?.status ?? null,
-      change: classifyCaseChange(baselineCase, currentCase),
+      change,
       baselineEvidence: comparisonEvidence(baselineCase),
       currentEvidence: comparisonEvidence(currentCase),
+      diagnosis: regressionDiagnosis(change, baselineCase, currentCase),
     };
   });
 }
@@ -473,5 +477,22 @@ export function compareEvaluationRuns(
 
     cases,
     summary,
+  };
+}
+
+function regressionDiagnosis(
+  change: EvaluationComparisonChange,
+  baseline: EvaluationCase | undefined,
+  current: EvaluationCase | undefined,
+): EvaluationRegressionDiagnosis | null {
+  if (change !== "REGRESSED" || !baseline || !current) {
+    return null;
+  }
+
+  return {
+    cause: `Evaluation outcome changed from ${baseline.status} to ${current.status}.`,
+    assertionType: current.assertionType || null,
+    expected: current.expected || null,
+    reason: current.reason || null,
   };
 }
