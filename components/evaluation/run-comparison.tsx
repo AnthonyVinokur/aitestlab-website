@@ -2,10 +2,54 @@ import type {
   EvaluationComparisonChange,
   EvaluationRunComparison,
   EvaluationComparisonEvidence,
+  EvaluationRegressionDiagnosis,
 } from "@/lib/evaluation/types";
 
 interface EvaluationRunComparisonProps {
   comparison: EvaluationRunComparison;
+}
+
+function RegressionDiagnosis({
+  diagnosis,
+}: {
+  diagnosis: EvaluationRegressionDiagnosis | null;
+}) {
+  if (!diagnosis) {
+    return null;
+  }
+
+  return (
+    <section
+      className="run-comparison-diagnosis"
+      aria-label="Regression diagnosis"
+    >
+      <span className="run-comparison-evidence-label">
+        Regression diagnosis
+      </span>
+
+      <p>
+        <strong>Cause:</strong> {diagnosis.cause}
+      </p>
+
+      {diagnosis.assertionType ? (
+        <p>
+          <strong>Assertion:</strong> {diagnosis.assertionType}
+        </p>
+      ) : null}
+
+      {diagnosis.expected ? (
+        <p>
+          <strong>Expected:</strong> <code>{diagnosis.expected}</code>
+        </p>
+      ) : null}
+
+      {diagnosis.reason ? (
+        <p>
+          <strong>Current evidence:</strong> {diagnosis.reason}
+        </p>
+      ) : null}
+    </section>
+  );
 }
 
 function formatDelta(value: number, suffix = "") {
@@ -265,6 +309,8 @@ export function EvaluationRunComparison({
                   {changeLabel(item.change)}
                 </strong>
               </summary>
+
+              <RegressionDiagnosis diagnosis={item.diagnosis} />
 
               <div className="run-comparison-evidence">
                 <ComparisonEvidence

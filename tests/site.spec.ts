@@ -314,3 +314,52 @@ test("results page compares the baseline and current evaluation runs", async ({
     }),
   ).toBeVisible();
 });
+
+test("results page explains why an evaluation regressed", async ({ page }) => {
+  await page.goto("/results");
+
+  const comparison = page.getByRole("region", {
+    name: "Compare evaluation runs.",
+  });
+
+  const regression = comparison.locator('[data-change="REGRESSED"]').filter({
+    hasText: "unexpected-failure-demo",
+  });
+
+  await expect(regression).toBeVisible();
+  await expect(regression).toHaveAttribute("open", "");
+
+  const diagnosis = regression.getByRole("region", {
+    name: "Regression diagnosis",
+  });
+
+  await expect(diagnosis).toBeVisible();
+
+  await expect(
+    diagnosis.getByText(
+      "Cause: Evaluation outcome changed from PASS to FAIL.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+
+  await expect(
+    diagnosis.getByText("Assertion:", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    diagnosis.getByText("Assertion: starts_with", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    diagnosis.getByText("This text should never match", {
+      exact: true,
+    }),
+  ).toBeVisible();
+
+  await expect(
+    diagnosis.getByText(
+      "Response does not start with expected text: 'This text should never match'",
+      { exact: false },
+    ),
+  ).toBeVisible();
+});
