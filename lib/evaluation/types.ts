@@ -247,6 +247,13 @@ export interface EvaluationRegressionDiagnosis {
   expected: string | null;
   reason: string | null;
 }
+export type EvaluationRegressionImpactLevel =
+  "HIGH" | "MEDIUM" | "LOW" | "NONE";
+
+export interface EvaluationRegressionImpact {
+  level: EvaluationRegressionImpactLevel;
+  reason: string;
+}
 
 export interface EvaluationCaseComparison {
   id: string;
@@ -257,4 +264,5 @@ export interface EvaluationCaseComparison {
   baselineEvidence: EvaluationComparisonEvidence | null;
   currentEvidence: EvaluationComparisonEvidence | null;
   diagnosis: EvaluationRegressionDiagnosis | null;
+  impact: EvaluationRegressionImpact | null;
 }
