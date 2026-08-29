@@ -16,6 +16,8 @@ import type {
   EvaluationComparisonEvidence,
   EvaluationRegressionImpact,
   EvaluationRegressionAction,
+  EvaluationComparisonIntegrity,
+  EvaluationComparisonIntegrityCheck,
 } from "./types";
 
 const numberOrNull = (value: unknown): number | null =>
@@ -337,6 +339,231 @@ function statusOutcome(
   return "NEUTRAL";
 }
 
+function comparisonValueCheck(
+  key: string,
+  label: string,
+  baseline: string | null,
+  current: string | null,
+): EvaluationComparisonIntegrityCheck {
+  if (!baseline || !current) {
+    return {
+      key,
+      label,
+      status: "UNKNOWN",
+      baseline,
+      current,
+    };
+  }
+
+  return {
+    key,
+    label,
+    status: baseline === current ? "MATCH" : "MISMATCH",
+    baseline,
+    current,
+  };
+}
+
+function comparisonSetCheck(
+  key: string,
+  label: string,
+  baselineValues: string[],
+  currentValues: string[],
+): EvaluationComparisonIntegrityCheck {
+  if (baselineValues.length === 0 || currentValues.length === 0) {
+    return {
+      key,
+      label,
+      status: "UNKNOWN",
+      baseline: baselineValues.length ? baselineValues.join(", ") : null,
+      current: currentValues.length ? currentValues.join(", ") : null,
+    };
+  }
+
+  const baseline = [...new Set(baselineValues)].sort();
+  const current = [...new Set(currentValues)].sort();
+
+  return {
+    key,
+    label,
+    status:
+      baseline.length === current.length &&
+      baseline.every((value, index) => value === current[index])
+        ? "MATCH"
+        : "MISMATCH",
+    baseline: baseline.join(", "),
+    current: current.join(", "),
+  };
+}
+
+function duplicateCaseIds(run: EvaluationRun): string[] {
+  const seen = new Set<string>();
+  const duplicates = new Set<string>();
+
+  for (const result of run.results) {
+    if (seen.has(result.id)) {
+      duplicates.add(result.id);
+    }
+
+    seen.add(result.id);
+  }
+
+  return [...duplicates].sort();
+}
+
+function caseIdentityCheck(
+  baseline: EvaluationRun,
+  current: EvaluationRun,
+): EvaluationComparisonIntegrityCheck {
+  const baselineDuplicates = duplicateCaseIds(baseline);
+  const currentDuplicates = duplicateCaseIds(current);
+
+  if (baselineDuplicates.length || currentDuplicates.length) {
+    return {
+      key: "case-identity",
+      label: "Case identity",
+      status: "MISMATCH",
+      baseline: baselineDuplicates.length
+        ? `Duplicate IDs: ${baselineDuplicates.join(", ")}`
+        : "Unique IDs",
+      current: currentDuplicates.length
+        ? `Duplicate IDs: ${currentDuplicates.join(", ")}`
+        : "Unique IDs",
+    };
+  }
+
+  return {
+    key: "case-identity",
+    label: "Case identity",
+    status: "MATCH",
+    baseline: "Unique IDs",
+    current: "Unique IDs",
+  };
+}
+
+function runIdentityCheck(
+  baseline: EvaluationRun,
+  current: EvaluationRun,
+): EvaluationComparisonIntegrityCheck {
+  const baselineKnown =
+    Boolean(baseline.runId) && baseline.runId !== "run-unknown";
+  const currentKnown =
+    Boolean(current.runId) && current.runId !== "run-unknown";
+
+  if (!baselineKnown || !currentKnown) {
+    return {
+      key: "run-identity",
+      label: "Run identity",
+      status: "UNKNOWN",
+      baseline: baselineKnown ? baseline.runId : null,
+      current: currentKnown ? current.runId : null,
+    };
+  }
+
+  return {
+    key: "run-identity",
+    label: "Run identity",
+    status: baseline.runId !== current.runId ? "MATCH" : "MISMATCH",
+    baseline: baseline.runId,
+    current: current.runId,
+  };
+}
+
+function deriveComparisonIntegrity(
+  baseline: EvaluationRun,
+  current: EvaluationRun,
+): EvaluationComparisonIntegrity {
+  const checks: EvaluationComparisonIntegrityCheck[] = [
+    runIdentityCheck(baseline, current),
+
+    comparisonValueCheck(
+      "schema-version",
+      "Report schema",
+      baseline.schemaVersion,
+      current.schemaVersion,
+    ),
+
+    comparisonValueCheck(
+      "report-type",
+      "Report type",
+      baseline.reportType,
+      current.reportType,
+    ),
+
+    comparisonValueCheck(
+      "provider",
+      "Provider",
+      baseline.context.provider,
+      current.context.provider,
+    ),
+
+    comparisonValueCheck(
+      "model",
+      "Model",
+      baseline.context.model,
+      current.context.model,
+    ),
+
+    comparisonValueCheck(
+      "profile-name",
+      "Evaluation profile",
+      baseline.context.profileName,
+      current.context.profileName,
+    ),
+
+    comparisonValueCheck(
+      "profile-version",
+      "Profile version",
+      baseline.context.profileVersion,
+      current.context.profileVersion,
+    ),
+
+    comparisonSetCheck(
+      "engines",
+      "Evaluation engines",
+      baseline.reproducibility.engines,
+      current.reproducibility.engines,
+    ),
+
+    comparisonSetCheck(
+      "evaluator-models",
+      "Evaluator models",
+      baseline.reproducibility.evaluatorModels,
+      current.reproducibility.evaluatorModels,
+    ),
+
+    caseIdentityCheck(baseline, current),
+  ];
+
+  const hasMismatch = checks.some((check) => check.status === "MISMATCH");
+  const hasUnknown = checks.some((check) => check.status === "UNKNOWN");
+
+  if (hasMismatch) {
+    return {
+      status: "INCOMPATIBLE",
+      explanation:
+        "Recorded evaluation conditions differ, so this is not a fully like-for-like regression comparison.",
+      checks,
+    };
+  }
+
+  if (hasUnknown) {
+    return {
+      status: "LIMITED",
+      explanation:
+        "Available evidence does not show conflicting evaluation conditions, but some comparison metadata was not reported.",
+      checks,
+    };
+  }
+
+  return {
+    status: "COMPARABLE",
+    explanation:
+      "Recorded evaluation conditions support a like-for-like regression comparison.",
+    checks,
+  };
+}
+
 function classifyCaseChange(
   baseline: EvaluationCase | undefined,
   current: EvaluationCase | undefined,
@@ -421,6 +648,7 @@ export function compareEvaluationRuns(
   baseline: EvaluationRun,
   current: EvaluationRun,
 ): EvaluationRunComparison {
+  const integrity = deriveComparisonIntegrity(baseline, current);
   const cases = compareCases(baseline, current);
 
   const summary = cases.reduce(
@@ -456,6 +684,8 @@ export function compareEvaluationRuns(
   return {
     baselineRunId: baseline.runId,
     currentRunId: current.runId,
+
+    integrity,
 
     baselineDecision: baseline.decision.status,
     currentDecision: current.decision.status,

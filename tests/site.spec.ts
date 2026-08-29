@@ -325,14 +325,6 @@ test("results page compares the baseline and current evaluation runs", async ({
 
   await expect(comparison).toBeVisible();
 
-  await expect(
-    comparison.getByText("run-20260807122918", { exact: true }),
-  ).toBeVisible();
-
-  await expect(
-    comparison.getByText("run-20260808122918", { exact: true }),
-  ).toBeVisible();
-
   const baselineRun = comparison.locator(".run-comparison-run").filter({
     hasText: "Baseline",
   });
@@ -340,6 +332,14 @@ test("results page compares the baseline and current evaluation runs", async ({
   const currentRun = comparison.locator(".run-comparison-run").filter({
     hasText: "Current",
   });
+
+  await expect(
+    baselineRun.getByText("run-20260807122918", { exact: true }),
+  ).toBeVisible();
+
+  await expect(
+    currentRun.getByText("run-20260808122918", { exact: true }),
+  ).toBeVisible();
 
   await expect(baselineRun.getByText("85.71%", { exact: true })).toBeVisible();
 
@@ -431,4 +431,68 @@ test("results page explains why an evaluation regressed", async ({ page }) => {
       { exact: false },
     ),
   ).toBeVisible();
+});
+
+test("results page reports regression comparison integrity", async ({
+  page,
+}) => {
+  await page.goto("/results");
+
+  const comparison = page.getByRole("region", {
+    name: "Compare evaluation runs.",
+  });
+
+  const integrity = comparison.getByRole("region", {
+    name: "Comparison integrity",
+  });
+
+  await expect(integrity).toBeVisible();
+  await expect(integrity).toHaveAttribute("data-integrity", "LIMITED");
+
+  await expect(integrity.getByText("LIMITED", { exact: true })).toBeVisible();
+
+  await expect(
+    integrity.getByText(
+      "Available evidence does not show conflicting evaluation conditions, but some comparison metadata was not reported.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+
+  const provider = integrity.locator(".run-comparison-integrity-check").filter({
+    has: page.getByText("Provider", { exact: true }),
+  });
+
+  await expect(provider).toHaveAttribute("data-status", "MATCH");
+  await expect(provider.getByText("Verified", { exact: true })).toBeVisible();
+
+  const model = integrity.locator(".run-comparison-integrity-check").filter({
+    has: page.getByText("Model", { exact: true }),
+  });
+
+  await expect(model).toHaveAttribute("data-status", "MATCH");
+  await expect(model.getByText("llama3.1:latest", { exact: true })).toHaveCount(
+    2,
+  );
+
+  const profile = integrity
+    .locator(".run-comparison-integrity-check")
+    .filter({ hasText: "Evaluation profile" });
+
+  await expect(profile).toHaveAttribute("data-status", "UNKNOWN");
+  await expect(profile.getByText("Unknown", { exact: true })).toBeVisible();
+
+  const engines = integrity.locator(".run-comparison-integrity-check").filter({
+    has: page.getByText("Evaluation engines", { exact: true }),
+  });
+
+  await expect(engines).toHaveAttribute("data-status", "MATCH");
+
+  const caseIdentity = integrity
+    .locator(".run-comparison-integrity-check")
+    .filter({ hasText: "Case identity" });
+
+  await expect(caseIdentity).toHaveAttribute("data-status", "MATCH");
+  await expect(
+    caseIdentity.getByText("Unique IDs", { exact: true }),
+  ).toHaveCount(2);
 });
