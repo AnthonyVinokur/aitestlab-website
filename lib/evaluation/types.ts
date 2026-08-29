@@ -207,9 +207,31 @@ export interface EvaluationComparisonSummary {
   removed: number;
 }
 
+export type EvaluationComparisonIntegrityStatus =
+  "COMPARABLE" | "LIMITED" | "INCOMPATIBLE";
+
+export type EvaluationComparisonIntegrityCheckStatus =
+  "MATCH" | "MISMATCH" | "UNKNOWN";
+
+export interface EvaluationComparisonIntegrityCheck {
+  key: string;
+  label: string;
+  status: EvaluationComparisonIntegrityCheckStatus;
+  baseline: string | null;
+  current: string | null;
+}
+
+export interface EvaluationComparisonIntegrity {
+  status: EvaluationComparisonIntegrityStatus;
+  explanation: string;
+  checks: EvaluationComparisonIntegrityCheck[];
+}
+
 export interface EvaluationRunComparison {
   baselineRunId: string;
   currentRunId: string;
+
+  integrity: EvaluationComparisonIntegrity;
 
   baselineDecision: EvaluationDecisionStatus;
   currentDecision: EvaluationDecisionStatus;

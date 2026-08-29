@@ -5,6 +5,7 @@ import type {
   EvaluationRegressionDiagnosis,
   EvaluationRegressionImpact,
   EvaluationRegressionAction,
+  EvaluationComparisonIntegrity,
 } from "@/lib/evaluation/types";
 
 interface EvaluationRunComparisonProps {
@@ -177,6 +178,62 @@ function ComparisonEvidence({
   );
 }
 
+function ComparisonIntegrity({
+  integrity,
+}: {
+  integrity: EvaluationComparisonIntegrity;
+}) {
+  return (
+    <section
+      className="run-comparison-integrity ui-card"
+      aria-label="Comparison integrity"
+      data-integrity={integrity.status}
+    >
+      <div className="run-comparison-integrity-heading">
+        <div>
+          <span className="run-comparison-label">Comparison integrity</span>
+          <strong>{integrity.status}</strong>
+        </div>
+
+        <p>{integrity.explanation}</p>
+      </div>
+
+      <div className="run-comparison-integrity-checks">
+        {integrity.checks.map((check) => (
+          <div
+            className="run-comparison-integrity-check"
+            data-status={check.status}
+            key={check.key}
+          >
+            <div>
+              <strong>{check.label}</strong>
+              <span>
+                {check.status === "MATCH"
+                  ? "Verified"
+                  : check.status === "MISMATCH"
+                    ? "Mismatch"
+                    : "Unknown"}
+              </span>
+            </div>
+
+            <dl>
+              <div>
+                <dt>Baseline</dt>
+                <dd>{check.baseline ?? "Not reported"}</dd>
+              </div>
+
+              <div>
+                <dt>Current</dt>
+                <dd>{check.current ?? "Not reported"}</dd>
+              </div>
+            </dl>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function EvaluationRunComparison({
   comparison,
 }: EvaluationRunComparisonProps) {
@@ -288,6 +345,8 @@ export function EvaluationRunComparison({
           </dl>
         </article>
       </div>
+
+      <ComparisonIntegrity integrity={comparison.integrity} />
 
       <div className="run-comparison-summary" aria-label="Comparison summary">
         <div>
