@@ -4,6 +4,7 @@ import type {
   EvaluationComparisonEvidence,
   EvaluationRegressionDiagnosis,
   EvaluationRegressionImpact,
+  EvaluationRegressionAction,
 } from "@/lib/evaluation/types";
 
 interface EvaluationRunComparisonProps {
@@ -81,6 +82,39 @@ function RegressionImpact({
       <div className="run-comparison-impact-content">
         <strong>{impact.level}</strong>
         <p>{impact.reason}</p>
+      </div>
+    </section>
+  );
+}
+
+function RegressionAction({
+  action,
+}: {
+  action: EvaluationRegressionAction | null;
+}) {
+  if (!action) {
+    return null;
+  }
+
+  return (
+    <section className="run-comparison-action" aria-label="Recommended action">
+      <span className="run-comparison-evidence-label">Recommended action</span>
+
+      <div className="run-comparison-action-content">
+        <div>
+          <small>Investigate</small>
+          <strong>{action.category}</strong>
+        </div>
+
+        <div>
+          <small>Why</small>
+          <p>{action.reason}</p>
+        </div>
+
+        <div>
+          <small>Next step</small>
+          <p>{action.nextStep}</p>
+        </div>
       </div>
     </section>
   );
@@ -339,6 +373,8 @@ export function EvaluationRunComparison({
               <RegressionImpact impact={item.impact} />
 
               <RegressionDiagnosis diagnosis={item.diagnosis} />
+
+              <RegressionAction action={item.action} />
 
               <div className="run-comparison-evidence">
                 <ComparisonEvidence

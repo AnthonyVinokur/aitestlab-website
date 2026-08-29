@@ -127,6 +127,44 @@ test("results page prioritizes a regression by impact", async ({ page }) => {
   ).toBeVisible();
 });
 
+test("results page provides a deterministic next action for a regression", async ({
+  page,
+}) => {
+  await page.goto("/results");
+
+  const comparison = page.getByRole("region", {
+    name: "Compare evaluation runs.",
+  });
+
+  const regression = comparison.locator('[data-change="REGRESSED"]').filter({
+    hasText: "unexpected-failure-demo",
+  });
+
+  await expect(regression).toBeVisible();
+
+  const action = regression.getByRole("region", {
+    name: "Recommended action",
+  });
+
+  await expect(action).toBeVisible();
+
+  await expect(action.getByText("Correctness", { exact: true })).toBeVisible();
+
+  await expect(
+    action.getByText(
+      "The starts_with assertion no longer accepts the current response.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+
+  await expect(
+    action.getByText(
+      "Compare the current response with the expected value and the starts_with assertion evidence.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+});
+
 test("unknown routes render the custom not-found experience", async ({
   page,
 }) => {

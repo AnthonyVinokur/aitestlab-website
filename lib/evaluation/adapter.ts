@@ -15,6 +15,7 @@ import type {
   EvaluationRegressionDiagnosis,
   EvaluationComparisonEvidence,
   EvaluationRegressionImpact,
+  EvaluationRegressionAction,
 } from "./types";
 
 const numberOrNull = (value: unknown): number | null =>
@@ -411,6 +412,7 @@ function compareCases(
       currentEvidence: comparisonEvidence(currentCase),
       diagnosis: regressionDiagnosis(change, baselineCase, currentCase),
       impact: regressionImpact(change, baselineCase, currentCase),
+      action: regressionAction(change, baselineCase, currentCase),
     };
   });
 }
@@ -513,5 +515,63 @@ function regressionImpact(
     reason:
       `Previously acceptable evaluation outcome changed from ` +
       `${baseline.status} to ${current.status} and now requires investigation.`,
+  };
+}
+
+function regressionAction(
+  change: EvaluationComparisonChange,
+  baseline: EvaluationCase | undefined,
+  current: EvaluationCase | undefined,
+): EvaluationRegressionAction | null {
+  if (change !== "REGRESSED" || !baseline || !current) {
+    return null;
+  }
+
+  const failedEngine = current.engineResults.find(
+    (result) => result.succeeded === false,
+  );
+
+  if (failedEngine) {
+    return {
+      category: "Execution",
+      reason: `The ${failedEngine.engine} evaluation engine reported an execution failure.`,
+      nextStep:
+        "Inspect the reported engine error before treating this as a model-quality regression.",
+    };
+  }
+
+  if (
+    current.assertionType &&
+    current.assertionType.toLowerCase() !== "unknown"
+  ) {
+    return {
+      category: "Correctness",
+      reason: `The ${current.assertionType} assertion no longer accepts the current response.`,
+      nextStep:
+        `Compare the current response with the expected value and the ` +
+        `${current.assertionType} assertion evidence.`,
+    };
+  }
+
+  const failedMetric = current.metrics.find(
+    (metric) => metric.passed === false,
+  );
+
+  if (failedMetric) {
+    return {
+      category: "Quality",
+      reason: `The ${failedMetric.name} metric did not meet its evaluation threshold.`,
+      nextStep:
+        `Inspect the ${failedMetric.name} score, threshold, and evaluator ` +
+        `evidence before accepting this run.`,
+    };
+  }
+
+  return {
+    category: "Evidence",
+    reason:
+      "The evaluation changed from an acceptable outcome to an unacceptable outcome without a more specific actionable signal.",
+    nextStep:
+      "Compare the baseline and current evidence before deciding whether this regression is acceptable.",
   };
 }

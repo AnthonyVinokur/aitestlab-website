@@ -3783,3 +3783,54 @@ p {
     border-right: 0;
   }
 }
+
+/* W2.17 — Regression actionability */
+
+.run-comparison-action {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0 var(--space-5) var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid rgba(117, 191, 255, 0.22);
+  border-radius: var(--radius-sm);
+  background: rgba(117, 191, 255, 0.045);
+}
+
+.run-comparison-action-content {
+  display: grid;
+  grid-template-columns:
+    minmax(120px, 0.45fr)
+    minmax(0, 1fr)
+    minmax(0, 1.25fr);
+  gap: var(--space-5);
+}
+
+.run-comparison-action-content > div {
+  display: grid;
+  align-content: start;
+  gap: var(--space-1);
+}
+
+.run-comparison-action-content small {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.run-comparison-action-content strong {
+  color: var(--color-info);
+}
+
+.run-comparison-action-content p {
+  margin: 0;
+  color: var(--muted-strong);
+}
+
+@media (max-width: 720px) {
+  .run-comparison-action-content {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+}

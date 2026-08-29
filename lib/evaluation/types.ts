@@ -254,6 +254,14 @@ export interface EvaluationRegressionImpact {
   level: EvaluationRegressionImpactLevel;
   reason: string;
 }
+export type EvaluationRegressionActionCategory =
+  "Correctness" | "Quality" | "Execution" | "Evidence";
+
+export interface EvaluationRegressionAction {
+  category: EvaluationRegressionActionCategory;
+  reason: string;
+  nextStep: string;
+}
 
 export interface EvaluationCaseComparison {
   id: string;
@@ -265,4 +273,5 @@ export interface EvaluationCaseComparison {
   currentEvidence: EvaluationComparisonEvidence | null;
   diagnosis: EvaluationRegressionDiagnosis | null;
   impact: EvaluationRegressionImpact | null;
+  action: EvaluationRegressionAction | null;
 }
